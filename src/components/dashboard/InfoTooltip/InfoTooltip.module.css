@@ -1,0 +1,38 @@
+.infoIcon {
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: help;
+  position: relative;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.infoIcon:hover {
+  color: var(--text-secondary);
+}
+
+.infoTooltip {
+  display: none;
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1c2129;
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  padding: 12px 14px;
+  width: 280px;
+  z-index: 10;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.infoTooltip strong {
+  color: var(--text-primary);
+}
+
+.infoIcon:hover .infoTooltip {
+  display: block;
+}

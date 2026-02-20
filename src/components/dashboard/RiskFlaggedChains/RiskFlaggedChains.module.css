@@ -1,0 +1,27 @@
+.chain {
+  margin-bottom: 14px;
+}
+.chain:last-child {
+  margin-bottom: 0;
+}
+.chainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.meta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.track {
+  height: 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.segment {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.2s;
+}

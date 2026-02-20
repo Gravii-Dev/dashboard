@@ -31,3 +31,6 @@ next-env.d.ts
 
 # Local-only docs (do not push to GitHub)
 docs/PRODUCTION_WORKFLOW.ko.md
+docs/DATA_PIPELINES.ko.md
+docs/PROJECT_OVERVIEW.ko.md
+docs/REQUIRED_DATA_AND_PRODUCTION.ko.md

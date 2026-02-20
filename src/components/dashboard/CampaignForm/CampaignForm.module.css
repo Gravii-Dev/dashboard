@@ -1,0 +1,214 @@
+.wrapper {
+  margin-top: 8px;
+}
+
+.step {
+  margin-bottom: 28px;
+}
+.stepHeader {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: var(--bg-primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.field {
+  margin-bottom: 0;
+}
+.fieldBlock {
+  margin-top: 12px;
+}
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.segTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+}
+.segTab {
+  font-size: 13px;
+  padding: 8px 18px;
+  cursor: pointer;
+  border: 1px solid var(--border-card);
+  background: rgba(255,255,255,0.02);
+  color: var(--text-muted);
+  transition: all 0.2s;
+  user-select: none;
+}
+.segTab:first-of-type {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.segTab:last-of-type {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-left-width: 0;
+}
+.segTab:hover {
+  color: var(--text-secondary);
+}
+.segTab.active {
+  background: rgba(88,166,255,0.12);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.orNote {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}
+.filterPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.reach {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 10px 0;
+}
+
+.elig {
+  margin-top: 14px;
+}
+.eligBox {
+  margin-top: 8px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggleLabel {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  transition: 0.2s;
+}
+.toggleInner {
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.toggle input:checked + .toggleLabel {
+  border-color: var(--accent-blue);
+  background: rgba(88,166,255,0.15);
+}
+.toggle input:checked + .toggleLabel .toggleInner {
+  transform: translateX(20px);
+  background: var(--accent-blue);
+}
+
+.submit {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.btn {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.btnDraft {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-secondary);
+}
+.btnDraft:hover {
+  background: rgba(255,255,255,0.12);
+}
+.btnLaunch {
+  background: var(--cta-bg);
+  color: white;
+}
+.btnLaunch:hover {
+  background: var(--cta-hover);
+}
+
+.mutedSpan {
+  font-size: 10px;
+  color: var(--text-muted);
+}

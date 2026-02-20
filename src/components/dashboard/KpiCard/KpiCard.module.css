@@ -1,0 +1,48 @@
+.kpiValue {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 8px;
+}
+
+.kpiValue sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  vertical-align: baseline;
+  font-weight: 400;
+}
+
+.kpiTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.kpiTag {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.kpiTag:nth-child(1) {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.kpiTag:nth-child(2) {
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.kpiTag:nth-child(3) {
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}

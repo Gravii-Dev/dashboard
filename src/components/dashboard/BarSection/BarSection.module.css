@@ -1,0 +1,68 @@
+.barSection {
+  margin-bottom: 18px;
+}
+.barSection:last-child {
+  margin-bottom: 0;
+}
+
+.barHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.barMeta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.barTrack {
+  height: 28px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 6px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.barSegment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.7);
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+.barSegmentLabel {
+  white-space: nowrap;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.barLegend {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.barLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.barLegendDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}

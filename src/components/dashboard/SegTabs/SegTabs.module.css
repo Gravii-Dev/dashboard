@@ -1,0 +1,33 @@
+.segTabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.segTab {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-card);
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.segTab:hover {
+  border-color: var(--border-hover);
+  color: var(--text-secondary);
+}
+.segTab.active {
+  background: rgba(88,166,255,0.12);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.segPanel {
+  display: none;
+}
+.segPanel.active {
+  display: block;
+}

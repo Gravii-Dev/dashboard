@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${spaceMono.variable}`}>
       <body style={{ fontFamily: "var(--font-outfit), sans-serif" }}>
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

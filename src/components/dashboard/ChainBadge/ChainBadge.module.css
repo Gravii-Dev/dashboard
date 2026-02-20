@@ -1,0 +1,20 @@
+.chainBadge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  color: white;
+}
+
+.ethereum {
+  background: #627eea;
+}
+
+.bsc {
+  background: #f0b90b;
+  color: #1a1a1a;
+}
+
+.base {
+  background: #0052ff;
+}

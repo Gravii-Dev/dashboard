@@ -1,0 +1,1 @@
+export { FlaggedWalletsTable } from "./FlaggedWalletsTable";

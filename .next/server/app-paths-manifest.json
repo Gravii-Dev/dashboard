@@ -1,7 +1,8 @@
 {
-  "/dashboard/analytics/page": "app/dashboard/analytics/page.js",
-  "/dashboard/risk/page": "app/dashboard/risk/page.js",
-  "/dashboard/campaigns/page": "app/dashboard/campaigns/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/labels/page": "app/dashboard/labels/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/(dashboard)/analytics/page": "app/(dashboard)/analytics/page.js",
+  "/(dashboard)/campaigns/page": "app/(dashboard)/campaigns/page.js",
+  "/(dashboard)/page": "app/(dashboard)/page.js",
+  "/(dashboard)/labels/page": "app/(dashboard)/labels/page.js",
+  "/(dashboard)/risk/page": "app/(dashboard)/risk/page.js"
 }

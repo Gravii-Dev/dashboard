@@ -1,0 +1,59 @@
+.clusterStack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.clusterCard {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border-top: 3px solid transparent;
+  transition: border-color 0.2s;
+}
+.clusterCard:hover {
+  border-color: var(--border-hover);
+}
+
+.clusterCard.criticalAccent {
+  border-top-color: var(--accent-red);
+}
+.clusterCard.highAccent {
+  border-top-color: var(--accent-orange);
+}
+.clusterCard.mediumAccent {
+  border-top-color: var(--accent-amber);
+}
+
+.clusterCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.clusterCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.clusterName {
+  font-weight: 600;
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+.clusterWallets {
+  text-align: right;
+}
+
+.clusterDetail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

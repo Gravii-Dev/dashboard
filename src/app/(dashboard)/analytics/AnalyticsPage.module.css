@@ -1,0 +1,134 @@
+/* Horizontal bar (DeFi split, wallet type, spending tier, activity) */
+.barTrack {
+  display: flex;
+  width: 100%;
+  height: 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.barSegment {
+  height: 100%;
+  transition: width 0.2s;
+}
+
+/* Bar legend (e.g. User Activity Status) */
+.barLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.barLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.barLegendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* KPI tags (e.g. Top Collections) */
+.kpiTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.kpiTag {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-card);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Rank list (e.g. Most Used DEX Protocols) */
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rankItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.rankName {
+  flex: 0 0 120px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.rankBarTrack {
+  flex: 1;
+  height: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 0;
+}
+.rankBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.2s;
+}
+.rankVal {
+  flex: 0 0 36px;
+  text-align: right;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Inline info tooltip (Wallet Type Distribution) */
+.infoIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1px solid var(--border-card);
+  border-radius: 50%;
+  cursor: help;
+  position: relative;
+  vertical-align: middle;
+}
+.infoIcon:hover .infoTooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.infoTooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 12px 14px;
+  min-width: 240px;
+  max-width: 320px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+  z-index: 10;
+  white-space: normal;
+  font-weight: 400;
+}
+.infoTooltip strong {
+  color: var(--text-primary);
+}

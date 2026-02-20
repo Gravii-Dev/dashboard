@@ -13,16 +13,15 @@ bun install
 bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000); you will be redirected to `/dashboard`.
+Open [http://localhost:3000](http://localhost:3000). In production the app is intended to run on **dashboard.gravii.io** (subdomain); routes are at the root (no `/dashboard` prefix).
 
 ## Routes
 
-- **`/`** → redirects to `/dashboard`
-- **`/dashboard`** — Overview (TVL/TIV donuts, value-by-chain bar charts, KPI cards)
-- **`/dashboard/analytics`** — User Analytics (chain tabs, group metrics)
-- **`/dashboard/labels`** — User Segments (By Behavior / By Value, label filters & summary)
-- **`/dashboard/risk`** — Risk & Sybil (risk donut, clusters, flagged table)
-- **`/dashboard/campaigns`** — Campaign Launch Manager (campaign list + create form)
+- **`/`** — Overview (TVL/TIV donuts, value-by-chain bar charts, KPI cards)
+- **`/analytics`** — User Analytics (chain tabs, group metrics)
+- **`/labels`** — User Segments (By Behavior / By Value, label filters & summary)
+- **`/risk`** — Risk & Sybil (risk donut, clusters, flagged table)
+- **`/campaigns`** — Campaign Launch Manager (campaign list + create form)
 
 ## Tech stack
 
@@ -36,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000); you will be redirected to `
 | Path | Description |
 |------|-------------|
 | `src/app/layout.tsx` | Root layout, Outfit / Space Mono fonts |
-| `src/app/dashboard/layout.tsx` | Sidebar + main content area |
+| `src/app/(dashboard)/layout.tsx` | Sidebar + main content area (route group; no URL segment) |
 | `src/components/dashboard/Sidebar.tsx` | Navigation sidebar (client) |
 | `src/components/dashboard/DonutCard.tsx` | Donut chart card component |
 | `src/lib/labels-data.ts` | User Segments label data |
