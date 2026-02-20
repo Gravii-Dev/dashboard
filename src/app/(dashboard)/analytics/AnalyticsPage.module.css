@@ -132,3 +132,43 @@
 .infoTooltip strong {
   color: var(--text-primary);
 }
+
+@media (max-width: 768px) {
+  .rankItem {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rankName {
+    flex: 0 0 100%;
+    font-size: 12px;
+  }
+  .rankBarTrack {
+    flex: 1;
+    min-width: 80px;
+  }
+  .rankVal {
+    flex: 0 0 auto;
+  }
+  .infoTooltip {
+    min-width: 200px;
+    max-width: 90vw;
+    left: 0;
+    transform: translateY(-8px);
+  }
+  .kpiTag {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .barLegend {
+    gap: 8px 14px;
+    font-size: 11px;
+  }
+}
+@media (max-width: 480px) {
+  .barLegendItem {
+    gap: 4px;
+  }
+  .rankBarTrack {
+    min-width: 60px;
+  }
+}

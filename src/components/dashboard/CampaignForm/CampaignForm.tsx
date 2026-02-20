@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { LABELS } from "@/lib/labels-data";
+import { campaignFormSchema, type CampaignFormValues } from "@/lib/campaign-schema";
 import { cn } from "@/lib/utils";
 import styles from "./CampaignForm.module.css";
 
@@ -11,31 +14,70 @@ const CAMPAIGN_TYPES = ["Airdrop", "Yield Boost", "Cashback", "Staking Reward", 
 const CTA_OPTIONS = ["Join Campaign", "Learn More", "Claim Now", "Opt In", "Boost Now", "Get Started", "Apply Now", "Custom"];
 const CHAIN_PILLS = ["All", "ETH", "Base", "Arbitrum", "BSC", "Polygon", "Avalanche", "Hyperliquid", "Kaia", "Solana"];
 
+const defaultValues: CampaignFormValues = {
+  partnerName: "",
+  campaignName: "",
+  campaignType: CAMPAIGN_TYPES[0],
+  description: "",
+  sybilTolerance: "moderate",
+  startDate: "",
+  endDate: "",
+  partnerLinkUrl: "",
+  ctaLabel: CTA_OPTIONS[0],
+  accessControl: true,
+};
+
 export function CampaignForm() {
   const [campTab, setCampTab] = useState<CampTab>("cbehavior");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CampaignFormValues>({
+    resolver: zodResolver(campaignFormSchema),
+    defaultValues,
+  });
+
+  const onDraft = () => {
+    handleSubmit(
+      (data) => {
+        console.log("Save as draft", data);
+      },
+      (err) => {
+        console.warn("Validation errors (draft)", err);
+      }
+    )();
+  };
+
+  const onLaunch = handleSubmit((data) => {
+    console.log("Launch campaign", data);
+  });
+
   return (
-    <div className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
       <div className={styles.step}>
         <div className={styles.stepHeader}><span className={styles.stepNum}>1</span> Basic Info</div>
         <div className={styles.formGrid}>
           <div className={styles.field}>
             <label className={styles.label}>Partner Name</label>
-            <input type="text" className={styles.input} placeholder="e.g. Pendle Finance" />
+            <input {...register("partnerName")} type="text" className={cn(styles.input, errors.partnerName && styles.inputError)} placeholder="e.g. Pendle Finance" />
+            {errors.partnerName && <span className={styles.errorText}>{errors.partnerName.message}</span>}
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Campaign Name</label>
-            <input type="text" className={styles.input} placeholder="e.g. Yield Booster" />
+            <input {...register("campaignName")} type="text" className={cn(styles.input, errors.campaignName && styles.inputError)} placeholder="e.g. Yield Booster" />
+            {errors.campaignName && <span className={styles.errorText}>{errors.campaignName.message}</span>}
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Campaign Type</label>
-            <select className={styles.select}>
+            <select {...register("campaignType")} className={styles.select}>
               {CAMPAIGN_TYPES.map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
           </div>
         </div>
         <div className={cn(styles.field, styles.fieldBlock)}>
           <label className={styles.label}>Description</label>
-          <textarea className={styles.textarea} placeholder="Describe the campaign benefits for users..." />
+          <textarea {...register("description")} className={styles.textarea} placeholder="Describe the campaign benefits for users..." />
         </div>
       </div>
 
@@ -81,7 +123,7 @@ export function CampaignForm() {
         <div className={styles.formGrid} style={{ marginTop: 14 }}>
           <div className={styles.field}>
             <label className={styles.label}>Sybil Risk Tolerance</label>
-            <select className={styles.select} defaultValue="moderate">
+            <select {...register("sybilTolerance")} className={styles.select}>
               <option value="strict">Strict — Low risk only</option>
               <option value="moderate">Moderate — Medium and below</option>
               <option value="relaxed">Relaxed — High and below</option>
@@ -99,19 +141,19 @@ export function CampaignForm() {
         <div className={styles.formGrid}>
           <div className={styles.field}>
             <label className={styles.label}>Start Date</label>
-            <input type="date" className={styles.input} />
+            <input {...register("startDate")} type="date" className={styles.input} />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>End Date</label>
-            <input type="date" className={styles.input} />
+            <input {...register("endDate")} type="date" className={styles.input} />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Partner Link URL</label>
-            <input type="text" className={styles.input} placeholder="https://partner.com/campaign" />
+            <input {...register("partnerLinkUrl")} type="text" className={styles.input} placeholder="https://partner.com/campaign" />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>CTA Button Label</label>
-            <select className={styles.select}>
+            <select {...register("ctaLabel")} className={styles.select}>
               {CTA_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
           </div>
@@ -125,16 +167,16 @@ export function CampaignForm() {
         <div className={styles.toggleRow}>
           <label className={styles.label}>Access Control (API filtering)</label>
           <div className={styles.toggle}>
-            <input type="checkbox" id="accessToggle" defaultChecked />
+            <input {...register("accessControl")} type="checkbox" id="accessToggle" />
             <label htmlFor="accessToggle" className={styles.toggleLabel}><span className={styles.toggleInner} /></label>
           </div>
         </div>
       </div>
 
       <div className={styles.submit}>
-        <button type="button" className={cn(styles.btn, styles.btnDraft)}>Save as Draft</button>
-        <button type="button" className={cn(styles.btn, styles.btnLaunch)}>Launch Campaign</button>
+        <button type="button" className={cn(styles.btn, styles.btnDraft)} onClick={onDraft} disabled={isSubmitting}>Save as Draft</button>
+        <button type="button" className={cn(styles.btn, styles.btnLaunch)} onClick={onLaunch} disabled={isSubmitting}>Launch Campaign</button>
       </div>
-    </div>
+    </form>
   );
 }

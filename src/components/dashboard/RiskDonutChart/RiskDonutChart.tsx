@@ -26,7 +26,6 @@ export function RiskDonutChart({ centerValue, centerLabel, segments }: Props) {
   const size = 140;
   const r = 56;
   const circumference = 2 * Math.PI * r;
-  let offset = 0;
 
   return (
     <div className={styles.wrapper}>
@@ -41,9 +40,9 @@ export function RiskDonutChart({ centerValue, centerLabel, segments }: Props) {
             strokeWidth={16}
           />
           {segments.map((seg, i) => {
+            const offsetPct = segments.slice(0, i).reduce((s, x) => s + x.pct, 0);
             const dashArray = strokeDashArray(circumference, seg.pct);
-            const dashOffset = strokeDashOffset(circumference, offset);
-            offset += seg.pct;
+            const dashOffset = strokeDashOffset(circumference, offsetPct);
             return (
               <circle
                 key={i}

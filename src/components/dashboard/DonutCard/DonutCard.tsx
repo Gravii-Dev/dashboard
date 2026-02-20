@@ -30,8 +30,6 @@ export function DonutCard({
 }) {
   const radius = 48;
   const circumference = 2 * Math.PI * radius; // ≈ 301.59
-  
-  let cumulativeValue = 0;
 
   return (
     <Card>
@@ -57,9 +55,9 @@ export function DonutCard({
               strokeWidth="14"
             />
             {segments.map((seg, i) => {
+              const offsetPct = segments.slice(0, i).reduce((s, x) => s + x.value, 0);
               const dashArray = `${(seg.value / 100) * circumference} ${circumference}`;
-              const dashOffset = -(cumulativeValue / 100) * circumference;
-              cumulativeValue += seg.value;
+              const dashOffset = -(offsetPct / 100) * circumference;
 
               return (
                 <circle

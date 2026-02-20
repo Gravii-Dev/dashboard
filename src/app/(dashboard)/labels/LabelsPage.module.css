@@ -190,16 +190,53 @@
   font-family: 'Space Mono', monospace;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
+  .filterSection {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .filterGroup {
+    min-width: 0;
+  }
   .summaryGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 768px) {
+  .filterBar {
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
   .labelGrid {
     grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .labelCard {
+    padding: 14px;
+  }
+  .labelCardName {
+    font-size: 14px;
+  }
+  .summarySection.summarySectionHasFilter {
+    padding-top: 16px;
   }
   .summaryGrid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .summaryCard {
+    padding: 14px 16px;
+  }
+  .summaryKpiValue {
+    font-size: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .filterSummary {
+    font-size: 12px;
+  }
+  .summaryKpiValue {
+    font-size: 22px;
   }
 }

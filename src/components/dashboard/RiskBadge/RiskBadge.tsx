@@ -1,7 +1,6 @@
 import styles from "./RiskBadge.module.css";
 
-const VARIANTS = ["critical", "high", "medium", "low"] as const;
-export type RiskBadgeVariant = (typeof VARIANTS)[number];
+export type RiskBadgeVariant = "critical" | "high" | "medium" | "low";
 
 export function RiskBadge({
   label,

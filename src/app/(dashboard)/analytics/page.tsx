@@ -37,16 +37,16 @@ export default function AnalyticsPage() {
         ))}
       </div>
 
-      <div className="grid-4" style={{ gridTemplateColumns: "repeat(5, 1fr)" }}>
-        <KpiCard title="Total Users" value="301,012" valueStyle={{ fontSize: 26 }} />
-        <KpiCard title="Avg Stablecoin Portfolio" value="$3,820" valueStyle={{ fontSize: 26 }} />
-        <KpiCard title="Avg Native Token Portfolio" value="$2,940" valueStyle={{ fontSize: 26 }} />
-        <KpiCard title="Avg Other Tokens Portfolio" value="$1,670" valueStyle={{ fontSize: 26 }} />
+      <div className="grid-5">
+        <KpiCard title="Total Users" value="301,012" valueStyle={{ fontSize: "1.5rem" }} />
+        <KpiCard title="Avg Stablecoin Portfolio" value="$3,820" valueStyle={{ fontSize: "1.5rem" }} />
+        <KpiCard title="Avg Native Token Portfolio" value="$2,940" valueStyle={{ fontSize: "1.5rem" }} />
+        <KpiCard title="Avg Other Tokens Portfolio" value="$1,670" valueStyle={{ fontSize: "1.5rem" }} />
         <KpiCard 
           title="Avg Idle Value (TIV)" 
           titleAsHtml 
           value="$4,280" 
-          valueStyle={{ fontSize: 26 }} 
+          valueStyle={{ fontSize: "1.5rem" }} 
         />
       </div>
 

@@ -33,5 +33,17 @@
 @media (max-width: 1024px) {
   .gridTop {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .gridTop {
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .miniKpis {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }

@@ -47,6 +47,7 @@ export function FlaggedWalletsTable({
           </select>
         </div>
       </div>
+      <div className={styles.tableScroll}>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -75,6 +76,7 @@ export function FlaggedWalletsTable({
           ))}
         </tbody>
       </table>
+      </div>
     </>
   );
 }
