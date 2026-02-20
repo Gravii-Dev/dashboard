@@ -123,6 +123,21 @@ input, button, select, textarea, span, div, p {
 .gpill.active { background: rgba(168,120,255,0.12); border-color: var(--accent-purple); color: var(--accent-purple); }
 .group-summary { font-size: 13px; color: var(--text-secondary); }
 
+/* Filter pills (User Segments, Campaigns, etc.) */
+.fpill {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-card);
+  color: var(--text-muted);
+  transition: all 0.2s;
+  user-select: none;
+}
+.fpill:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+.fpill.active { background: rgba(88,166,255,0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1440px) {
   .grid-5 { grid-template-columns: repeat(3, 1fr); }
