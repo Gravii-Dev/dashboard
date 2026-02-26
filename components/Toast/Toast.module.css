@@ -74,3 +74,17 @@
   from { opacity: 1; transform: translateX(0); }
   to { opacity: 0; transform: translateX(40px); }
 }
+
+@media (max-width: 768px) {
+  .container {
+    top: auto;
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+  }
+  .toast {
+    max-width: 100%;
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+}

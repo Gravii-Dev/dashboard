@@ -61,3 +61,33 @@
   100% { border-color: var(--border-card); box-shadow: none; }
 }
 .campFieldFilled { animation: fieldHighlight 1.5s ease forwards; }
+
+@media (max-width: 1200px) {
+  .campCards { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .campListHeader { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .campFilters { flex-wrap: wrap; }
+  .campCards { grid-template-columns: 1fr; gap: 10px; }
+
+  .campFormWrapper { padding: 16px; }
+  .campFormGrid { grid-template-columns: 1fr; }
+  .campStep { margin-bottom: 16px; padding-bottom: 14px; }
+  .campStepHeader { font-size: 14px; }
+
+  .campSubmit { flex-direction: column; }
+  .campBtn { width: 100%; text-align: center; }
+
+  .campCardTop { flex-direction: column; gap: 8px; }
+  .campBadges { flex-wrap: wrap; }
+  .campCardMeta { flex-direction: column; gap: 4px; }
+
+  .campReach { font-size: 18px; }
+  .campToggleRow { flex-wrap: wrap; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .campFormWrapper { padding: 12px; }
+  .campInput, .campSelect, .campTextarea { font-size: 14px; padding: 12px; }
+}

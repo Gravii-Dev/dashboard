@@ -73,9 +73,9 @@ export default function RiskPage() {
 
   if (overviewLoading) {
     return (
-      <div className="page active" id="page-risk">
+      <div className={`page active ${s.riskRoot}`} id="page-risk">
         <div className="main-header">
-          <h1 className="main-title glow">Risk Analysis</h1>
+          <h1 className="main-title glow">Risk & Sybil</h1>
         </div>
         <SkeletonGrid count={2} columns={2} tall />
         <SkeletonGrid count={1} columns={2} tall />
@@ -85,9 +85,9 @@ export default function RiskPage() {
 
   if (overviewError || !overview) {
     return (
-      <div className="page active" id="page-risk">
+      <div className={`page active ${s.riskRoot}`} id="page-risk">
         <div className="main-header">
-          <h1 className="main-title glow">Risk Analysis</h1>
+          <h1 className="main-title glow">Risk & Sybil</h1>
         </div>
         <ErrorState onRetry={() => refetchOverview()} />
       </div>
@@ -97,9 +97,9 @@ export default function RiskPage() {
   const wallets = walletsData?.items ?? [];
 
   return (
-    <div className="page active" id="page-risk">
+    <div className={`page active ${s.riskRoot}`} id="page-risk">
       <div className="main-header">
-        <h1 className="main-title glow">Risk Analysis</h1>
+        <h1 className="main-title glow">Risk & Sybil</h1>
       </div>
 
       <div className={s.riskGridTop}>
@@ -203,9 +203,9 @@ export default function RiskPage() {
         </div>
       </div>
 
-      <div className="card" style={{ marginTop: "20px" }}>
+      <div className={cx("card", s.tableCard)}>
         <div className={s.tableHeader}>
-          <div className="card-title glow-sm" style={{ marginBottom: 0 }}>Recently Flagged Wallets</div>
+          <div className="card-title glow-sm">Recently Flagged Wallets</div>
           <div className={s.tableFilters}>
             <select
               className={s.tableFilter}
@@ -231,6 +231,7 @@ export default function RiskPage() {
         {walletsLoading ? (
           <SkeletonTable rows={5} />
         ) : (
+          <div className={s.tableScroll}>
           <table className={s.flaggedTable}>
             <thead>
               <tr>
@@ -265,6 +266,7 @@ export default function RiskPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 

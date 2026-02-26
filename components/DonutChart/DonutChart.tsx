@@ -31,8 +31,11 @@ export default function DonutChart({
 
   return (
     <div className={s.wrapper}>
-      <div className={s.container} style={{ width: size, height: size }}>
-        <svg className={s.svg} width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <div
+        className={s.container}
+        style={{ "--donut-size": `${size}px` } as React.CSSProperties}
+      >
+        <svg className={s.svg} viewBox={`0 0 ${size} ${size}`}>
           <circle
             cx={center}
             cy={center}

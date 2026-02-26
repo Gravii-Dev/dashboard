@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
 
       {stats && (
         <>
-          <div className="grid-4" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
+          <div className={s.topKpiGrid}>
             <Card title="Total Users">
               <div className="kpi-value glow a-val" style={{ fontSize: "26px" }}>
                 {stats.users.toLocaleString()}

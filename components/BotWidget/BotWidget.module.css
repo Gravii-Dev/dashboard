@@ -101,3 +101,24 @@
 .chatInput:focus { border-color: var(--accent-blue); outline: none; }
 .chatInput::placeholder { color: var(--text-muted); }
 .chatInput:disabled { opacity: 0.5; }
+
+@media (max-width: 768px) {
+  .wrapper {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+  .box {
+    min-height: 160px;
+    padding: 12px;
+  }
+  .input {
+    min-height: 180px;
+    font-size: 14px;
+    padding: 12px 12px 32px;
+  }
+  .messages {
+    min-height: 140px;
+    max-height: 260px;
+  }
+  .hint { font-size: 10px; }
+}

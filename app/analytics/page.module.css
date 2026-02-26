@@ -27,5 +27,34 @@
 .quadItem { padding: 10px; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm); }
 .quadLabel { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.2px; }
 .quadValue { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--text-primary); }
-.analyticsBarLabel { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+.analyticsBarLabel { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; gap: 4px; }
 .analyticsBarLabel b { color: var(--text-secondary); }
+
+.topKpiGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 20px; }
+.topKpiGrid .card { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+
+@media (max-width: 1200px) {
+  .topKpiGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .topKpiGrid { grid-template-columns: repeat(2, 1fr); }
+
+  .chainTabs { gap: 4px; }
+  .chainTab { font-size: 12px; padding: 5px 12px; }
+
+  .groupBar { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 14px; }
+  .groupPills { flex-wrap: wrap; gap: 4px; }
+  .gpill { font-size: 12px; padding: 5px 14px; }
+
+  .quadGrid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tripleGrid { grid-template-columns: 1fr; gap: 8px; }
+  .quadValue { font-size: 16px; }
+
+  .analyticsBarLabel { font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .topKpiGrid { grid-template-columns: 1fr; }
+  .quadGrid { grid-template-columns: 1fr; }
+}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-import Sidebar from "@/components/Sidebar/Sidebar";
+import AppShell from "@/components/AppShell/AppShell";
 import QueryProvider from "@/lib/queries/provider";
 import ToastProvider from "@/components/Toast/ToastProvider";
 import AuthProvider from "@/lib/auth/AuthContext";
@@ -39,8 +39,7 @@ export default function RootLayout({
             <TamboWrapper>
               <ToastProvider>
                 <AuthGuard>
-                  <Sidebar />
-                  <main className="main">{children}</main>
+                  <AppShell>{children}</AppShell>
                 </AuthGuard>
               </ToastProvider>
             </TamboWrapper>

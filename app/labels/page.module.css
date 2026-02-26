@@ -35,3 +35,21 @@
 .summaryGrid :global(.card) { transition: border-color 0.3s; background: rgba(168,120,255,0.05); border-color: rgba(168,120,255,0.12); }
 .summaryGrid.hasFilter :global(.card) { border-color: rgba(168,120,255,0.3); }
 .summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+
+@media (max-width: 1200px) {
+  .labelGrid { grid-template-columns: repeat(2, 1fr); }
+  .summaryGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .labelGrid { grid-template-columns: 1fr; gap: 10px; }
+  .summaryGrid { grid-template-columns: 1fr; gap: 12px; }
+  .summarySection { padding: 16px; }
+  .summaryLabel { font-size: 14px; flex-wrap: wrap; }
+  .selectedPills { gap: 3px; }
+  .labelCardCount { font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  .labelGridHeader { font-size: 14px; }
+}
