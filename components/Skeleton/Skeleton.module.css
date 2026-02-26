@@ -1,0 +1,89 @@
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.base {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.card {
+  composes: base;
+  height: 180px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-card);
+}
+
+.cardTall {
+  composes: card;
+  height: 280px;
+}
+
+.line {
+  composes: base;
+  height: 14px;
+  width: 60%;
+  margin-bottom: 10px;
+}
+
+.lineShort {
+  composes: line;
+  width: 40%;
+}
+
+.lineFull {
+  composes: line;
+  width: 100%;
+}
+
+.circle {
+  composes: base;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.tableRow {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tableCell {
+  composes: base;
+  height: 16px;
+  flex: 1;
+}
+
+@media (max-width: 1200px) {
+  .grid4 { grid-template-columns: repeat(2, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .grid4, .grid2 { grid-template-columns: 1fr; }
+}

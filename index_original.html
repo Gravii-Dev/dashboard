@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gravii Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Base colors - Dark Navy/Charcoal */
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-card: #1c2129;
+    --bg-card-hover: #21262d;
+    --bg-sidebar: #0d1117;
+    --bg-sidebar-active: rgba(255,255,255,0.06);
+
+    /* Borders */
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-card: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.12);
+
+    /* Text */
+    --text-primary: #f0f4f8;
+    --text-secondary: #a8b2bf;
+    --text-muted: #6b7685;
+    --text-glow: rgba(255,255,255,0.85);
+
+    /* Accent palette - muted, no neon */
+    --accent-blue: #58a6ff;
+    --accent-purple: #bc8cff;
+    --accent-teal: #56d4c0;
+    --accent-pink: #f778ba;
+    --accent-amber: #e3b341;
+    --accent-orange: #f0883e;
+    --accent-red: #f85149;
+
+    /* Chart colors */
+    --chart-1: #58a6ff;
+    --chart-2: #bc8cff;
+    --chart-3: #56d4c0;
+    --chart-4: #f778ba;
+    --chart-5: #e3b341;
+    --chart-6: #f0883e;
+
+    /* CTA */
+    --cta-bg: #c9575d;
+    --cta-hover: #d46a6f;
+
+    /* Sizing */
+    --sidebar-width: 220px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== TEXT GLOW ========== */
+  .glow {
+    text-shadow: 0 0 20px rgba(255,255,255,0.15), 0 0 40px rgba(255,255,255,0.05);
+  }
+  .glow-sm {
+    text-shadow: 0 0 12px rgba(255,255,255,0.1), 0 0 24px rgba(255,255,255,0.03);
+  }
+
+  /* ========== SIDEBAR ========== */
+  .sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    padding: 0 8px 28px;
+    color: var(--text-primary);
+  }
+  .sidebar-logo .glow {
+    text-shadow: 0 0 24px rgba(255,255,255,0.2), 0 0 48px rgba(255,255,255,0.06);
+  }
+
+  .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 400;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-item:hover {
+    background: var(--bg-sidebar-active);
+    color: var(--text-primary);
+  }
+  .nav-item.active {
+    background: var(--bg-sidebar-active);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .nav-divider { height: 1px; background: var(--border-subtle); margin: 12px 0; }
+
+  .nav-cta {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500;
+    background: var(--cta-bg);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--cta-hover); }
+
+  /* AI Chatbot */
+  .sidebar-bot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .bot-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 4px 12px;
+  }
+  .bot-label {
+    font-size: 13px; font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+  }
+  .bot-mode {
+    font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 10px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .bot-mode.insights { background: rgba(88,166,255,0.12); color: var(--accent-blue); }
+  .bot-mode.campaign { background: rgba(63,187,123,0.12); color: var(--accent-teal); }
+  .bot-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(88,166,255,0.15);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    min-height: 200px;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: space-between;
+    animation: pulseBlue 3s ease-in-out infinite;
+    transition: all 0.4s;
+  }
+  .bot-box.campaign-glow {
+    border-color: rgba(63,187,123,0.15);
+    animation: pulseGreen 3s ease-in-out infinite;
+  }
+  @keyframes pulseBlue {
+    0%, 100% { box-shadow: 0 0 8px rgba(88,166,255,0.04), 0 0 2px rgba(88,166,255,0.08); border-color: rgba(88,166,255,0.1); }
+    50% { box-shadow: 0 0 20px rgba(88,166,255,0.1), 0 0 4px rgba(88,166,255,0.15); border-color: rgba(88,166,255,0.3); }
+  }
+  @keyframes pulseGreen {
+    0%, 100% { box-shadow: 0 0 8px rgba(63,187,123,0.04), 0 0 2px rgba(63,187,123,0.08); border-color: rgba(63,187,123,0.1); }
+    50% { box-shadow: 0 0 20px rgba(63,187,123,0.1), 0 0 4px rgba(63,187,123,0.15); border-color: rgba(63,187,123,0.3); }
+  }
+  .bot-examples { display: none; }
+  .bot-hint {
+    font-size: 11px; color: var(--text-muted); font-style: italic;
+    margin-top: 8px; line-height: 1.4;
+  }
+  .bot-input-wrap {
+    position: relative; flex: 1; display: flex; flex-direction: column;
+  }
+  .bot-input {
+    width: 100%; flex: 1; min-height: 280px; padding: 14px 14px 36px; background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    color: var(--text-primary); font-size: 13px; font-family: 'Outfit', sans-serif;
+    transition: border-color 0.2s; resize: none;
+  }
+  .bot-input:focus { border-color: var(--accent-blue); outline: none; }
+  .bot-input::placeholder { color: var(--text-muted); }
+  .bot-send {
+    position: absolute; right: 10px; bottom: 10px;
+    background: none; border: none; color: var(--text-muted); cursor: pointer;
+    font-size: 14px; transition: color 0.2s;
+  }
+  .bot-send:hover { color: var(--accent-blue); }
+
+  .sidebar-project {
+    padding-top: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-left: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ========== MAIN CONTENT ========== */
+  .main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 28px 32px;
+    min-height: 100vh;
+    background: var(--bg-primary);
+  }
+
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .main-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header-cta {
+    padding: 10px 22px;
+    background: var(--cta-bg);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .header-cta:hover { background: var(--cta-hover); transform: translateY(-1px); }
+
+  /* ========== CARD SYSTEM ========== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-hover); }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    letter-spacing: 0.2px;
+  }
+
+  /* ========== GRID LAYOUTS ========== */
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .grid-2-half {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  /* ========== DONUT CHART ========== */
+  .donut-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .donut-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+  .donut-svg { transform: rotate(-90deg); }
+  .donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .donut-center-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .donut-center-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .donut-center-value sup {
+    font-size: 11px;
+    color: var(--text-secondary);
+    vertical-align: super;
+  }
+
+  /* Legend */
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-value {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-primary);
+  }
+
+  /* ========== HORIZONTAL BAR CHART ========== */
+  .bar-section { margin-bottom: 18px; }
+  .bar-section:last-child { margin-bottom: 0; }
+
+  .bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .chain-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: white;
+  }
+  .chain-badge.ethereum { background: #627eea; }
+  .chain-badge.bsc { background: #f0b90b; color: #1a1a1a; }
+  .chain-badge.base { background: #0052ff; }
+
+  .bar-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .bar-track {
+    height: 28px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-segment {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.7);
+    transition: width 0.6s ease;
+    position: relative;
+  }
+  .bar-segment-label {
+    white-space: nowrap;
+    padding: 0 6px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .bar-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .bar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .bar-legend-dot {
+    width: 6px; height: 6px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ========== KPI CARDS ========== */
+  .kpi-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 8px;
+  }
+  .kpi-value sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    vertical-align: baseline;
+    font-weight: 400;
+  }
+
+  /* ========== PAGE SWITCHING ========== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ========== RISK PAGE ========== */
+  .risk-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .risk-left { display: flex; flex-direction: column; gap: 16px; }
+  .risk-mini-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .mini-kpi { padding: 14px; }
+  .mini-kpi .card-title { margin-bottom: 8px; }
+
+  .flagged-chain { margin-bottom: 12px; }
+  .flagged-chain:last-child { margin-bottom: 0; }
+  .flagged-chain-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+
+  /* Cluster card stack (vertical in right column) */
+  .risk-right { display: flex; flex-direction: column; }
+  .cluster-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+  .cluster-card {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border-card); border-radius: var(--radius-md);
+    padding: 16px; border-top: 3px solid transparent; transition: border-color 0.2s;
+  }
+  .cluster-card:hover { border-color: var(--border-hover); }
+  .cluster-card.critical-accent { border-top-color: var(--accent-red); }
+  .cluster-card.high-accent { border-top-color: var(--accent-orange); }
+  .cluster-card.medium-accent { border-top-color: var(--accent-amber); }
+  .cluster-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .cluster-card-body { display: flex; flex-direction: column; gap: 6px; }
+  .cluster-name { font-weight: 600; font-size: 15px; margin-right: 10px; }
+  .cluster-wallets { text-align: right; }
+  .cluster-wallets .bar-meta { display: block; }
+  .cluster-detail { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+
+  /* Risk badges */
+  .risk-badge { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 12px; }
+  .risk-badge.critical { background: rgba(248,81,73,0.15); color: var(--accent-red); }
+  .risk-badge.high { background: rgba(240,136,62,0.15); color: var(--accent-orange); }
+  .risk-badge.medium { background: rgba(227,179,65,0.15); color: var(--accent-amber); }
+  .risk-badge.low { background: rgba(86,212,192,0.15); color: var(--accent-teal); }
+
+  /* Entropy bar */
+  .entropy-bar { display: inline-block; width: 60px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; vertical-align: middle; margin-left: 6px; }
+  .entropy-fill { display: block; height: 100%; background: var(--accent-orange); border-radius: 3px; }
+
+  /* Table */
+  .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .table-filters { display: flex; gap: 8px; }
+  .table-filter {
+    background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-secondary);
+    padding: 6px 12px; border-radius: 6px; font-family: 'Outfit', sans-serif; font-size: 12px; cursor: pointer;
+  }
+  .flagged-table { width: 100%; border-collapse: collapse; }
+  .flagged-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); }
+  .flagged-table td { padding: 10px 12px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); }
+  .flagged-table .mono { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-primary); }
+  .btn-block { background: var(--accent-red); color: white; border: none; padding: 5px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: opacity 0.2s; }
+  .btn-block:hover { opacity: 0.8; }
+
+  /* ========== TAG/BADGE LIST (for Top 3 cards) ========== */
+  .kpi-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .kpi-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-card);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+  }
+  .kpi-tag:nth-child(1) { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .kpi-tag:nth-child(2) { border-color: var(--accent-purple); color: var(--accent-purple); }
+  .kpi-tag:nth-child(3) { border-color: var(--accent-teal); color: var(--accent-teal); }
+
+  /* ========== USER ANALYTICS PAGE ========== */
+  /* Chain Tabs */
+  .chain-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .chain-tab {
+    font-size: 13px; padding: 6px 16px; border-radius: 20px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border-card); color: var(--text-muted);
+    transition: all 0.2s; user-select: none; font-weight: 500;
+  }
+  .chain-tab:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+  .chain-tab.active { background: rgba(88,166,255,0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  /* Group Bar */
+  .group-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 14px 18px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius-md); }
+  .group-pills { display: flex; gap: 6px; }
+  .gpill {
+    font-size: 13px; padding: 6px 18px; border-radius: 20px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border-card); color: var(--text-muted);
+    transition: all 0.2s; user-select: none; font-weight: 600;
+  }
+  .gpill:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+  .gpill.active { background: rgba(168,120,255,0.12); border-color: var(--accent-purple); color: var(--accent-purple); }
+  .group-summary { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+
+  /* Info icon tooltip */
+  .info-icon {
+    font-size: 13px; color: var(--text-muted); cursor: help; position: relative; margin-left: 4px; display: inline-block;
+  }
+  .info-icon:hover { color: var(--text-secondary); }
+  .info-tooltip {
+    display: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1c2129; border: 1px solid var(--border-hover); border-radius: 8px; padding: 12px 14px;
+    width: 280px; z-index: 10; font-size: 12px; line-height: 1.6; color: var(--text-secondary);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .info-tooltip strong { color: var(--text-primary); }
+  .info-icon:hover .info-tooltip { display: block; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .triple-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .quad-item { padding: 10px; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm); }
+  .quad-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.2px; }
+  .quad-value { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--text-primary); }
+  .analytics-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+  .analytics-bar-label b { color: var(--text-secondary); }
+
+  /* Rank list (horizontal bar ranking) */
+  .rank-list { display: flex; flex-direction: column; gap: 10px; }
+  .rank-item { display: flex; align-items: center; gap: 10px; }
+  .rank-name { font-size: 13px; color: var(--text-secondary); min-width: 100px; }
+  .rank-bar-track { flex: 1; height: 16px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+  .rank-bar { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+  .rank-val { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-muted); min-width: 36px; text-align: right; }
+
+  /* Segment tabs */
+  .seg-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .seg-tab {
+    font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border-card); color: var(--text-muted); transition: all 0.2s;
+  }
+  .seg-tab:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+  .seg-tab.active { background: rgba(88,166,255,0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .seg-panel { display: none; }
+  .seg-panel.active { display: block; }
+
+  /* ========== USER LABELS PAGE ========== */
+  .filter-bar { margin-bottom: 20px; }
+  .filter-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+  .filter-group { display: flex; align-items: center; gap: 10px; }
+  .filter-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; min-width: 56px; }
+  .filter-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fpill {
+    font-size: 12px; padding: 5px 12px; border-radius: 16px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border-card); color: var(--text-muted);
+    transition: all 0.2s; user-select: none;
+  }
+  .fpill:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+  .fpill.active { background: rgba(88,166,255,0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .filter-summary { font-size: 13px; color: var(--text-secondary); padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+  .summary-highlight { color: var(--text-primary); font-weight: 600; }
+
+  /* Label card grid */
+  .label-grid-header { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 14px; letter-spacing: 0.3px; }
+  .label-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .label-card {
+    background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius-md);
+    padding: 16px; cursor: pointer; transition: all 0.2s; position: relative;
+  }
+  .label-card:hover { border-color: var(--border-hover); box-shadow: 0 0 12px rgba(88,166,255,0.08); }
+  .label-card.selected { border-color: var(--accent-blue); background: rgba(88,166,255,0.04); }
+  .label-checkbox {
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-card);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent;
+    transition: all 0.2s; flex-shrink: 0; margin-right: 8px;
+  }
+  .label-card:hover .label-checkbox { border-color: var(--text-muted); }
+  .label-card.selected .label-checkbox { border-color: var(--accent-blue); background: var(--accent-blue); color: white; }
+  .label-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .label-card-left { display: flex; align-items: center; }
+  .label-card-name { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .label-card-count { font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text-primary); white-space: nowrap; margin-left: 8px; }
+  .label-card-pct { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; padding-left: 24px; }
+  .label-chain-bar { display: flex; height: 4px; border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+  .label-expand { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); cursor: pointer; }
+  .label-expand:hover { color: var(--text-secondary); }
+  .expand-arrow { transition: transform 0.2s; font-size: 10px; }
+  .label-card.expanded .expand-arrow { transform: rotate(180deg); }
+  .label-threshold { font-size: 11px; color: var(--accent-blue); margin-top: 6px; }
+
+  /* Summary cards - filtered state */
+  .summary-section {
+    position: relative; background: rgba(168,120,255,0.07); border: 1px solid rgba(168,120,255,0.2);
+    border-radius: var(--radius-lg); padding: 20px; margin-top: 8px;
+  }
+  .summary-label { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 14px; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+  .selected-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .selected-pill { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(88,166,255,0.12); color: var(--accent-blue); }
+  .summary-grid .card { transition: border-color 0.3s; background: rgba(168,120,255,0.05); border-color: rgba(168,120,255,0.12); }
+  .summary-grid.has-filter .card { border-color: rgba(168,120,255,0.3); }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  
+  /* Count-up animation */
+  @keyframes countPulse {
+    0% { opacity: 0.5; transform: scale(0.97); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .count-animate { animation: countPulse 0.4s ease; }
+
+  .analytics-link {
+    font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    letter-spacing: 0.2px;
+  }
+  .analytics-link:hover { color: var(--accent-blue); }
+
+  @keyframes fieldHighlight {
+    0% { border-color: var(--accent-teal); box-shadow: 0 0 12px rgba(86,212,192,0.3); }
+    100% { border-color: var(--border-card); box-shadow: none; }
+  }
+  .camp-field-filled { animation: fieldHighlight 1.5s ease forwards; }
+
+  /* ========== CAMPAIGN PAGE ========== */
+  .camp-list-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .camp-list-title { font-size:16px; font-weight:700; color:var(--text-secondary); }
+  .camp-filters { display:flex; gap:6px; }
+  .camp-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:24px; }
+  .camp-card { background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--radius-md); padding:16px; transition:border-color 0.2s; }
+  .camp-card:hover { border-color:var(--border-hover); }
+  .camp-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+  .camp-partner { font-size:11px; color:var(--text-muted); margin-bottom:2px; }
+  .camp-name { font-size:15px; font-weight:700; color:var(--text-primary); }
+  .camp-badges { display:flex; gap:6px; align-items:center; }
+  .camp-type-badge { font-size:11px; padding:3px 10px; border-radius:12px; background:rgba(88,166,255,0.1); color:var(--accent-blue); }
+  .camp-status-badge { font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600; }
+  .camp-status-badge.live { background:rgba(63,187,123,0.15); color:var(--accent-teal); }
+  .camp-status-badge.draft { background:rgba(255,255,255,0.06); color:var(--text-muted); }
+  .camp-status-badge.ended { background:rgba(248,81,73,0.12); color:var(--accent-red); }
+  .camp-card-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); }
+
+  /* Form */
+  .camp-form-wrapper { background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:24px; }
+  .camp-form-title { font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:20px; }
+  .camp-step { margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border-subtle); }
+  .camp-step:last-of-type { border-bottom:none; margin-bottom:16px; }
+  .camp-step-header { font-size:15px; font-weight:700; color:var(--text-secondary); margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .step-num { width:26px; height:26px; border-radius:50%; background:rgba(88,166,255,0.12); color:var(--accent-blue); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+  .camp-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .camp-field { display:flex; flex-direction:column; gap:4px; }
+  .camp-label { font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; }
+  .camp-input, .camp-select, .camp-textarea {
+    background:rgba(255,255,255,0.03); border:1px solid var(--border-card); border-radius:var(--radius-sm);
+    padding:10px 12px; color:var(--text-primary); font-size:13px; font-family:'Outfit',sans-serif;
+    transition:border-color 0.2s;
+  }
+  .camp-input:focus, .camp-select:focus, .camp-textarea:focus { border-color:var(--accent-blue); outline:none; }
+  .camp-select { cursor:pointer; }
+  .camp-select option { background:var(--bg-main); color:var(--text-primary); }
+  .camp-textarea { min-height:80px; resize:vertical; }
+  .camp-pills { flex-wrap:wrap; }
+  .camp-or-note { font-size:11px; color:var(--text-muted); margin-bottom:12px; font-style:italic; }
+  .cseg-panel { display:none; }
+  .cseg-panel.active { display:block; }
+  .camp-reach { font-family:'Space Mono',monospace; font-size:20px; font-weight:700; color:var(--accent-teal); padding:8px 0; }
+  .camp-elig-box { background:rgba(168,120,255,0.06); border:1px solid rgba(168,120,255,0.15); border-radius:var(--radius-sm); padding:10px 14px; font-size:13px; color:var(--text-secondary); margin-top:6px; }
+
+  /* Toggle */
+  .camp-toggle-row { display:flex; align-items:center; justify-content:space-between; }
+  .camp-toggle input { display:none; }
+  .toggle-label { width:44px; height:24px; background:rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; position:relative; display:block; transition:background 0.2s; }
+  .toggle-inner { width:18px; height:18px; background:var(--text-muted); border-radius:50%; position:absolute; top:3px; left:3px; transition:all 0.2s; }
+  .camp-toggle input:checked + .toggle-label { background:rgba(63,187,123,0.25); }
+  .camp-toggle input:checked + .toggle-label .toggle-inner { left:23px; background:var(--accent-teal); }
+
+  /* Submit buttons */
+  .camp-submit { display:flex; gap:12px; justify-content:flex-end; margin-top:8px; }
+  .camp-btn { padding:12px 28px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+  .camp-btn.draft { background:rgba(255,255,255,0.06); color:var(--text-secondary); border:1px solid var(--border-card); }
+  .camp-btn.draft:hover { border-color:var(--border-hover); }
+  .camp-btn.launch { background:var(--accent-red); color:white; }
+  .camp-btn.launch:hover { opacity:0.9; }
+
+  /* ========== ANIMATIONS ========== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+  }
+  .grid-4 .card:nth-child(1) { animation-delay: 0.05s; }
+  .grid-4 .card:nth-child(2) { animation-delay: 0.1s; }
+  .grid-4 .card:nth-child(3) { animation-delay: 0.15s; }
+  .grid-4 .card:nth-child(4) { animation-delay: 0.2s; }
+  .grid-2-half .card:nth-child(1) { animation-delay: 0.25s; }
+  .grid-2-half .card:nth-child(2) { animation-delay: 0.3s; }
+
+  /* Donut animation */
+  @keyframes donutDraw {
+    from { stroke-dashoffset: var(--circumference); }
+  }
+  .donut-segment {
+    animation: donutDraw 1s ease forwards;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 1200px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2-half { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 20px 16px; }
+    .grid-4, .grid-2-half { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar">
+  <div class="sidebar-logo"><span class="glow">Gravii</span></div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item active" href="#" data-page="overview">
+      <span class="icon">⊞</span> Overview
+    </a>
+    <a class="nav-item" href="#" data-page="analytics">
+      <span class="icon">◎</span> User analytics
+    </a>
+    <a class="nav-item" href="#" data-page="labels">
+      <span class="icon">◈</span> User Segments
+    </a>
+    <a class="nav-item" href="#" data-page="risk">
+      <span class="icon">⚠</span> Risk & Sybil
+    </a>
+    <div class="nav-divider"></div>
+
+    <a class="nav-cta" href="#" data-page="campaigns">
+      <span class="icon">+</span> Create your campaigns
+    </a>
+  </nav>
+
+  <div class="sidebar-bot">
+    <div class="bot-header">
+      <div class="bot-label" id="botLabel">Gravii Insights</div>
+      <span class="bot-mode insights" id="botMode">Data Insights</span>
+    </div>
+    <div class="bot-box">
+      <div class="bot-input-wrap">
+        <textarea class="bot-input" id="botInput" placeholder="Ask about your users' data"></textarea>
+        <button class="bot-send">-></button>
+      </div>
+      <div class="bot-hint" id="botHint">Explore the dashboard, or type a question here.<br><br>e.g. "Which segment has the highest retention?"</div>
+    </div>
+  </div>
+
+  <div class="sidebar-project">Project name</div>
+</aside>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="main">
+
+<!-- PAGE: Overview -->
+<div class="page active" id="page-overview">
+  <div class="main-header">
+    <h1 class="main-title glow">Gravii Dashboard</h1>
+    <button class="header-cta">Create your campaigns</button>
+  </div>
+
+  <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;letter-spacing:0.3px;">Your Connected Users — Asset Overview</div>
+  <!-- ROW 1: Deployed & Available Donut Charts -->
+  <div class="grid-4">
+    <!-- TVL (Stables) -->
+    <div class="card">
+      <div class="card-title glow-sm">Deployed — Stables</div>
+      <div class="donut-wrapper">
+        <div class="donut-container">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-1)" stroke-width="14" stroke-dasharray="150.8 301.6" stroke-dashoffset="0.0" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-2)" stroke-width="14" stroke-dasharray="90.5 301.6" stroke-dashoffset="-150.8" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-3)" stroke-width="14" stroke-dasharray="42.2 301.6" stroke-dashoffset="-241.3" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-4)" stroke-width="14" stroke-dasharray="18.1 301.6" stroke-dashoffset="-283.5" style="--circumference:301.6"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-label">Total</div>
+            <div class="donut-center-value glow-sm">2,847<sup>$</sup></div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-1)"></span>USDC<span class="legend-value">50%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-2)"></span>USDT<span class="legend-value">30%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-3)"></span>DAI<span class="legend-value">14%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-4)"></span>Others<span class="legend-value">6%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TVL (Tokens) -->
+    <div class="card">
+      <div class="card-title glow-sm">Deployed — Tokens</div>
+      <div class="donut-wrapper">
+        <div class="donut-container">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-5)" stroke-width="14" stroke-dasharray="120.7 301.6" stroke-dashoffset="0.0" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-6)" stroke-width="14" stroke-dasharray="90.5 301.6" stroke-dashoffset="-120.7" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-1)" stroke-width="14" stroke-dasharray="60.3 301.6" stroke-dashoffset="-211.1" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-3)" stroke-width="14" stroke-dasharray="30.2 301.6" stroke-dashoffset="-271.4" style="--circumference:301.6"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-label">Total</div>
+            <div class="donut-center-value glow-sm">1,923<sup>$</sup></div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-5)"></span>ETH<span class="legend-value">40%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-6)"></span>BNB<span class="legend-value">30%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-1)"></span>LINK<span class="legend-value">20%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-3)"></span>Others<span class="legend-value">10%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TVU (Stables) -->
+    <div class="card">
+      <div class="card-title glow-sm">Available — Stables <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Available Assets</strong> — Assets held by your connected users without active deployment. Not staked, lent, or providing liquidity.</div></span></div>
+      <div class="donut-wrapper">
+        <div class="donut-container">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-2)" stroke-width="14" stroke-dasharray="135.7 301.6" stroke-dashoffset="0.0" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-4)" stroke-width="14" stroke-dasharray="90.5 301.6" stroke-dashoffset="-135.7" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-1)" stroke-width="14" stroke-dasharray="48.0 301.6" stroke-dashoffset="-226.2" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-6)" stroke-width="14" stroke-dasharray="27.4 301.6" stroke-dashoffset="-274.2" style="--circumference:301.6"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-label">Total</div>
+            <div class="donut-center-value glow-sm">1,124<sup>$</sup></div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-2)"></span>USDC<span class="legend-value">45%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-4)"></span>USDT<span class="legend-value">30%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-1)"></span>DAI<span class="legend-value">16%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-6)"></span>Others<span class="legend-value">9%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TVU (Tokens) -->
+    <div class="card">
+      <div class="card-title glow-sm">Available — Tokens <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Available Assets</strong> — Assets held by your connected users without active deployment. Not staked, lent, or providing liquidity.</div></span></div>
+      <div class="donut-wrapper">
+        <div class="donut-container">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-3)" stroke-width="14" stroke-dasharray="120.7 301.6" stroke-dashoffset="0.0" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-5)" stroke-width="14" stroke-dasharray="75.4 301.6" stroke-dashoffset="-120.7" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-2)" stroke-width="14" stroke-dasharray="60.3 301.6" stroke-dashoffset="-196.1" style="--circumference:301.6"/>
+            <circle class="donut-segment" cx="60" cy="60" r="48" fill="none" stroke="var(--chart-4)" stroke-width="14" stroke-dasharray="45.2 301.6" stroke-dashoffset="-256.4" style="--circumference:301.6"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-center-label">Total</div>
+            <div class="donut-center-value glow-sm">682<sup>$</sup></div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-3)"></span>ETH<span class="legend-value">40%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-5)"></span>BNB<span class="legend-value">25%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-2)"></span>MATIC<span class="legend-value">20%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-4)"></span>Others<span class="legend-value">15%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Horizontal Bar Charts -->
+  <div class="grid-2-half">
+    <!-- Value by chain (TVL) -->
+    <div class="card">
+      <div class="card-title glow-sm">Deployed by Chain — Top 3</div>
+
+      <!-- Ethereum -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge ethereum">Ethereum</span>
+          <span class="bar-meta">188 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:55%;background:var(--chart-1)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:30%;background:var(--chart-2)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:15%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-1)"></span>Stables 55%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-2)"></span>Native 30%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 15%</span>
+        </div>
+      </div>
+
+      <!-- BSC -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge bsc">BSC</span>
+          <span class="bar-meta">188 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:50%;background:var(--chart-1)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:35%;background:var(--chart-2)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:15%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-1)"></span>Stables 50%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-2)"></span>Native 35%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 15%</span>
+        </div>
+      </div>
+
+      <!-- Base -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge base">Base</span>
+          <span class="bar-meta">189 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:45%;background:var(--chart-1)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:35%;background:var(--chart-2)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:20%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-1)"></span>Stables 45%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-2)"></span>Native 35%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 20%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Value by chain (TIV) -->
+    <div class="card">
+      <div class="card-title glow-sm">Available by Chain — Top 3</div>
+
+      <!-- Ethereum -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge ethereum">Ethereum</span>
+          <span class="bar-meta">188 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:50%;background:var(--chart-3)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:30%;background:var(--chart-5)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:20%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-3)"></span>Stables 50%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-5)"></span>Native 30%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 20%</span>
+        </div>
+      </div>
+
+      <!-- BSC -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge bsc">BSC</span>
+          <span class="bar-meta">188 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:48%;background:var(--chart-3)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:32%;background:var(--chart-5)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:20%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-3)"></span>Stables 48%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-5)"></span>Native 32%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 20%</span>
+        </div>
+      </div>
+
+      <!-- Base -->
+      <div class="bar-section">
+        <div class="bar-header">
+          <span class="chain-badge base">Base</span>
+          <span class="bar-meta">189 users · 38%</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-segment" style="width:42%;background:var(--chart-3)"><span class="bar-segment-label">Stables</span></div>
+          <div class="bar-segment" style="width:38%;background:var(--chart-5)"><span class="bar-segment-label">Native</span></div>
+          <div class="bar-segment" style="width:20%;background:var(--chart-6)"><span class="bar-segment-label">Other</span></div>
+        </div>
+        <div class="bar-legend">
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-3)"></span>Stables 42%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-5)"></span>Native 38%</span>
+          <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-6)"></span>Other 20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: KPI Big Numbers -->
+  <div style="margin-bottom:12px;text-align:right;"><a href="#" class="analytics-link" onclick="goToAnalytics(event)">Want deeper insights? → Go to User Analytics</a></div>
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title glow-sm">Avg. Monthly Trading Volume<br>(Per wallet)</div>
+      <div class="kpi-value glow">$12,010</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Avg. Monthly Tx Count</div>
+      <div class="kpi-value glow">72</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Avg. Monthly Payment Amount</div>
+      <div class="kpi-value glow">$2,327</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Avg. Monthly Payment Count</div>
+      <div class="kpi-value glow">32</div>
+    </div>
+  </div>
+
+  <!-- ROW 4: Activity KPIs -->
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title glow-sm">Active wallets (7d)</div>
+      <div class="kpi-value glow">301,012</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Active traders (7d)</div>
+      <div class="kpi-value glow">12,010</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Active Protocol Users</div>
+      <div class="kpi-value glow">8,001</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Cross-chain Users</div>
+      <div class="kpi-value glow">1,777</div>
+    </div>
+  </div>
+
+  <!-- ROW 5: Insights -->
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title glow-sm">Top 3 Interacted Protocols</div>
+      <div class="kpi-tags">
+        <span class="kpi-tag">Pendle Finance</span>
+        <span class="kpi-tag">Pendle Finance</span>
+        <span class="kpi-tag">Curve</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Top 3 Funding Sources</div>
+      <div class="kpi-tags">
+        <span class="kpi-tag">Binance</span>
+        <span class="kpi-tag">OKX</span>
+        <span class="kpi-tag">Bybit</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Net NFT Worth (Total)</div>
+      <div class="kpi-value glow">$12,772,030</div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Sybil rate</div>
+      <div class="kpi-value glow">37%</div>
+    </div>
+  </div>
+</div><!-- end page-overview -->
+
+<!-- PAGE: Risk & Sybil -->
+<div class="page" id="page-risk">
+  <div class="main-header">
+    <h1 class="main-title glow">Risk Analysis</h1>
+  </div>
+
+  <!-- Top row: Donut + Clusters -->
+  <div class="risk-grid-top">
+    <!-- LEFT: Risk Level Distribution + KPIs + Flagged Chains -->
+    <div class="risk-left">
+      <div class="card">
+        <div class="card-title glow-sm">Risk Level Distribution</div>
+        <div class="donut-wrapper">
+          <div class="donut-container" style="width:140px;height:140px;">
+            <svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="16"/>
+              <!-- Critical 23% -->
+              <circle cx="70" cy="70" r="56" fill="none" stroke="var(--accent-red)" stroke-width="16" stroke-dasharray="80.9 351.9" stroke-dashoffset="0"/>
+              <!-- High 34% -->
+              <circle cx="70" cy="70" r="56" fill="none" stroke="var(--accent-orange)" stroke-width="16" stroke-dasharray="119.6 351.9" stroke-dashoffset="-80.9"/>
+              <!-- Medium 28% -->
+              <circle cx="70" cy="70" r="56" fill="none" stroke="var(--accent-amber)" stroke-width="16" stroke-dasharray="98.5 351.9" stroke-dashoffset="-200.5"/>
+              <!-- Low 15% -->
+              <circle cx="70" cy="70" r="56" fill="none" stroke="var(--accent-teal)" stroke-width="16" stroke-dasharray="52.8 351.9" stroke-dashoffset="-299"/>
+            </svg>
+            <div class="donut-center">
+              <div class="donut-center-value glow-sm" style="font-size:22px;">19%</div>
+              <div class="donut-center-label">At Risk</div>
+            </div>
+          </div>
+          <div class="donut-legend" style="flex-direction:row;flex-wrap:wrap;gap:12px;justify-content:center;">
+            <div class="legend-item"><span class="legend-dot" style="background:var(--accent-red)"></span>Critical<span class="legend-value">538 · 23%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--accent-orange)"></span>High<span class="legend-value">796 · 34%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--accent-amber)"></span>Medium<span class="legend-value">655 · 28%</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--accent-teal)"></span>Low<span class="legend-value">351 · 15%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini KPIs -->
+      <div class="risk-mini-kpis">
+        <div class="card mini-kpi">
+          <div class="card-title glow-sm">Total Analyzed</div>
+          <div class="kpi-value glow" style="font-size:24px;">2,340</div>
+        </div>
+        <div class="card mini-kpi">
+          <div class="card-title glow-sm">Flagged Rate</div>
+          <div class="kpi-value glow" style="font-size:24px;">19%</div>
+        </div>
+        <div class="card mini-kpi">
+          <div class="card-title glow-sm">Avg Entropy</div>
+          <div class="kpi-value glow" style="font-size:24px;">0.15</div>
+        </div>
+      </div>
+
+      <!-- Top Flagged Chains -->
+      <div class="card">
+        <div class="card-title glow-sm">Top Flagged Chains</div>
+        <div class="flagged-chain">
+          <div class="flagged-chain-header"><span class="chain-badge ethereum">Ethereum</span><span class="bar-meta">42%</span></div>
+          <div class="bar-track" style="height:20px;"><div class="bar-segment" style="width:42%;background:var(--accent-red);border-radius:4px;"></div></div>
+        </div>
+        <div class="flagged-chain">
+          <div class="flagged-chain-header"><span class="chain-badge bsc">BSC</span><span class="bar-meta">35%</span></div>
+          <div class="bar-track" style="height:20px;"><div class="bar-segment" style="width:35%;background:var(--accent-orange);border-radius:4px;"></div></div>
+        </div>
+        <div class="flagged-chain">
+          <div class="flagged-chain-header"><span class="chain-badge base">Base</span><span class="bar-meta">23%</span></div>
+          <div class="bar-track" style="height:20px;"><div class="bar-segment" style="width:23%;background:var(--accent-amber);border-radius:4px;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Sybil Clusters as vertical card stack -->
+    <div class="risk-right">
+      <div class="card" style="height:100%;">
+        <div class="card-title glow-sm">Sybil Clusters Detected</div>
+        <div class="cluster-stack">
+          <div class="cluster-card critical-accent">
+            <div class="cluster-card-header">
+              <div><span class="cluster-name">Cluster #1</span><span class="risk-badge critical">Critical Risk</span></div>
+              <div class="cluster-wallets"><span class="kpi-value glow" style="font-size:22px;">247</span><span class="bar-meta">wallets</span></div>
+            </div>
+            <div class="cluster-card-body">
+              <div class="cluster-detail">Shared Funding Source</div>
+              <div class="cluster-detail">Identical Transaction Timing</div>
+              <div class="cluster-detail">Entropy: 0.08 <span class="entropy-bar"><span class="entropy-fill" style="width:8%;background:var(--accent-red)"></span></span></div>
+            </div>
+          </div>
+          <div class="cluster-card high-accent">
+            <div class="cluster-card-header">
+              <div><span class="cluster-name">Cluster #2</span><span class="risk-badge high">High Risk</span></div>
+              <div class="cluster-wallets"><span class="kpi-value glow" style="font-size:22px;">183</span><span class="bar-meta">wallets</span></div>
+            </div>
+            <div class="cluster-card-body">
+              <div class="cluster-detail">Cross-contract Coordination</div>
+              <div class="cluster-detail">Similar Gas Price Patterns</div>
+              <div class="cluster-detail">Entropy: 0.14 <span class="entropy-bar"><span class="entropy-fill" style="width:14%;background:var(--accent-orange)"></span></span></div>
+            </div>
+          </div>
+          <div class="cluster-card medium-accent">
+            <div class="cluster-card-header">
+              <div><span class="cluster-name">Cluster #3</span><span class="risk-badge medium">Medium Risk</span></div>
+              <div class="cluster-wallets"><span class="kpi-value glow" style="font-size:22px;">129</span><span class="bar-meta">wallets</span></div>
+            </div>
+            <div class="cluster-card-body">
+              <div class="cluster-detail">Circular Transfer Loops</div>
+              <div class="cluster-detail">Low Portfolio Diversity</div>
+              <div class="cluster-detail">Entropy: 0.24 <span class="entropy-bar"><span class="entropy-fill" style="width:24%;background:var(--accent-amber)"></span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: Flagged Wallets Table -->
+  <div class="card" style="margin-top:20px;">
+    <div class="table-header">
+      <div class="card-title glow-sm" style="margin-bottom:0;">Recently Flagged Wallets</div>
+      <div class="table-filters">
+        <select class="table-filter" id="riskFilter" onchange="filterTable()">
+          <option value="all">All Levels</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+        </select>
+        <select class="table-filter" id="sortFilter" onchange="sortTable()">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+    </div>
+    <table class="flagged-table">
+      <thead>
+        <tr><th>Wallet Address</th><th>Risk Level</th><th>Cluster</th><th>Flagged</th><th>Action</th></tr>
+      </thead>
+      <tbody id="flaggedBody">
+        <tr data-risk="critical" data-time="2"><td class="mono">0x742d...3f8a</td><td><span class="risk-badge critical">Critical</span></td><td>Cluster #1</td><td>2 hours ago</td><td><button class="btn-block">Block</button></td></tr>
+        <tr data-risk="critical" data-time="3"><td class="mono">0x8c91...5a2b</td><td><span class="risk-badge critical">Critical</span></td><td>Cluster #1</td><td>3 hours ago</td><td><button class="btn-block">Block</button></td></tr>
+        <tr data-risk="high" data-time="5"><td class="mono">0x3e4f...7d9c</td><td><span class="risk-badge high">High</span></td><td>Cluster #2</td><td>5 hours ago</td><td><button class="btn-block">Block</button></td></tr>
+        <tr data-risk="high" data-time="8"><td class="mono">0xa7b2...4e6f</td><td><span class="risk-badge high">High</span></td><td>Cluster #2</td><td>8 hours ago</td><td><button class="btn-block">Block</button></td></tr>
+        <tr data-risk="medium" data-time="12"><td class="mono">0x5d8c...2a1b</td><td><span class="risk-badge medium">Medium</span></td><td>Cluster #3</td><td>12 hours ago</td><td><button class="btn-block">Block</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div><!-- end page-risk -->
+
+<!-- PAGE: User Segments -->
+<div class="page" id="page-labels">
+  <div class="main-header">
+    <h1 class="main-title glow">User Segments</h1>
+  </div>
+
+  <!-- Segment Tabs -->
+  <div class="seg-tabs">
+    <span class="seg-tab active" data-seg="behavior">By Behavior</span>
+    <span class="seg-tab" data-seg="value">By Value</span>
+  </div>
+
+  <!-- TAB 1: By Behavior -->
+  <div class="seg-panel active" id="seg-behavior">
+
+  <!-- Filter Bar -->
+  <div class="card filter-bar">
+    <div class="filter-section">
+      <div class="filter-group">
+        <div class="filter-label">Chains</div>
+        <div class="filter-pills" id="chainPills">
+          <span class="fpill active" data-chain="all">All</span>
+          <span class="fpill" data-chain="eth">ETH</span>
+          <span class="fpill" data-chain="base">Base</span>
+          <span class="fpill" data-chain="arb">Arbitrum</span>
+          <span class="fpill" data-chain="bsc">BSC</span>
+          <span class="fpill" data-chain="poly">Polygon</span>
+          <span class="fpill" data-chain="avax">Avalanche</span>
+          <span class="fpill" data-chain="hl">Hyperliquid</span>
+          <span class="fpill" data-chain="kaia">Kaia</span>
+          <span class="fpill" data-chain="sol">Solana</span>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Assets</div>
+        <div class="filter-pills" id="assetPills">
+          <span class="fpill active" data-asset="all">All</span>
+          <span class="fpill" data-asset="stables">Stables</span>
+          <span class="fpill" data-asset="native">Native</span>
+          <span class="fpill" data-asset="others">Others</span>
+        </div>
+      </div>
+    </div>
+    <div class="filter-summary" id="filterSummary">
+      <span class="summary-highlight">0 labels</span> · <span class="summary-highlight">All chains</span> · <span class="summary-highlight" id="filteredUsers">301,012 users</span>
+    </div>
+  </div>
+
+  <!-- Label Cards Grid -->
+  <div class="label-grid-header">Click segments to filter ↓</div>
+  <div class="label-grid" id="labelGrid"></div>
+
+  <!-- Aggregate Summary -->
+  <div class="summary-section">
+    <div class="summary-label">Filtered Results <span class="selected-pills" id="selectedPills"></span></div>
+    <div class="summary-grid" id="summaryGrid">
+      <div class="card">
+        <div class="card-title glow-sm">Filtered Users</div>
+        <div class="kpi-value glow" id="sumUsers" style="font-size:28px;">301,012</div>
+      </div>
+      <div class="card">
+        <div class="card-title glow-sm">Avg Balance</div>
+        <div class="kpi-value glow" id="sumBalance" style="font-size:28px;">$4,230</div>
+      </div>
+      <div class="card">
+        <div class="card-title glow-sm">Avg Tx Frequency</div>
+        <div class="kpi-value glow" id="sumTxFreq" style="font-size:28px;">38/mo</div>
+      </div>
+      <div class="card">
+        <div class="card-title glow-sm">Retention Rate (30d)</div>
+        <div class="kpi-value glow" id="sumRetention" style="font-size:28px;">72%</div>
+      </div>
+    </div>
+  </div>
+  </div><!-- end seg-behavior -->
+
+  <!-- TAB 2: By Value -->
+  <div class="seg-panel" id="seg-value">
+    <div class="card filter-bar">
+      <div class="filter-section">
+        <div class="filter-group"><div class="filter-label">Chains</div><div class="filter-pills" id="valChainPills">
+          <span class="fpill active" data-vchain="all">All</span><span class="fpill" data-vchain="eth">ETH</span><span class="fpill" data-vchain="base">Base</span><span class="fpill" data-vchain="arb">Arbitrum</span><span class="fpill" data-vchain="bsc">BSC</span><span class="fpill" data-vchain="poly">Polygon</span><span class="fpill" data-vchain="avax">Avalanche</span><span class="fpill" data-vchain="hl">Hyperliquid</span><span class="fpill" data-vchain="kaia">Kaia</span><span class="fpill" data-vchain="sol">Solana</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Asset Type <span style="font-size:9px;font-weight:400;color:var(--text-muted);display:block;">Holdings &amp; Payment</span></div><div class="filter-pills" id="valAssetPills">
+          <span class="fpill active" data-vasset="all">All</span><span class="fpill" data-vasset="stables">Stables</span><span class="fpill" data-vasset="native">Native</span><span class="fpill" data-vasset="others">Others</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Holdings</div><div class="filter-pills" id="holdPills">
+          <span class="fpill active" data-hold="all">All</span><span class="fpill" data-hold="u1k">&lt; $1K</span><span class="fpill" data-hold="1k10k">$1K–$10K</span><span class="fpill" data-hold="10k50k">$10K–$50K</span><span class="fpill" data-hold="50kp">$50K+</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Payment</div><div class="filter-pills" id="payPills">
+          <span class="fpill active" data-pay="all">All</span><span class="fpill" data-pay="u500">&lt; $500</span><span class="fpill" data-pay="500_5k">$500–$5K</span><span class="fpill" data-pay="5k20k">$5K–$20K</span><span class="fpill" data-pay="20kp">$20K+</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Trading Vol</div><div class="filter-pills" id="tradePills">
+          <span class="fpill active" data-trade="all">All</span><span class="fpill" data-trade="u1k">&lt; $1K</span><span class="fpill" data-trade="1k10k">$1K–$10K</span><span class="fpill" data-trade="10k100k">$10K–$100K</span><span class="fpill" data-trade="100kp">$100K+</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Available Value Filter <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Available Assets</strong> — Assets held by your connected users without active deployment. Not staked, lent, or providing liquidity.</div></span></div><div class="filter-pills" id="tivPills">
+          <span class="fpill active" data-tiv="all">All</span><span class="fpill" data-tiv="1k">Avail &gt; $1K</span><span class="fpill" data-tiv="10k">Avail &gt; $10K</span><span class="fpill" data-tiv="50k">Avail &gt; $50K</span><span class="fpill" data-tiv="100k">Avail &gt; $100K</span>
+        </div></div>
+      </div>
+      <div class="filter-summary" id="valFilterSummary"><span class="summary-highlight">All filters</span> · <span class="summary-highlight">301,012 users</span></div>
+    </div>
+
+    <div class="summary-section" style="margin-top:16px;">
+      <div class="summary-label">Filtered Results</div>
+      <div class="summary-grid">
+        <div class="card"><div class="card-title glow-sm">Filtered Users</div><div class="kpi-value glow" id="valUsers" style="font-size:28px;">301,012</div></div>
+        <div class="card"><div class="card-title glow-sm">Avg Portfolio</div><div class="kpi-value glow" id="valPortfolio" style="font-size:28px;">$8,430</div></div>
+        <div class="card"><div class="card-title glow-sm">Avg Monthly Payment</div><div class="kpi-value glow" id="valPayment" style="font-size:28px;">$2,327</div></div>
+        <div class="card"><div class="card-title glow-sm">Avg Trading Volume</div><div class="kpi-value glow" id="valTrading" style="font-size:28px;">$47,200</div></div>
+      </div>
+    </div>
+
+    <div class="grid-2-half" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-title glow-sm">Holdings Distribution</div>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-name">&lt; $1K</span><div class="rank-bar-track"><div class="rank-bar" style="width:42%;background:var(--chart-4)"></div></div><span class="rank-val">42%</span></div>
+          <div class="rank-item"><span class="rank-name">$1K–$10K</span><div class="rank-bar-track"><div class="rank-bar" style="width:30%;background:var(--chart-1)"></div></div><span class="rank-val">30%</span></div>
+          <div class="rank-item"><span class="rank-name">$10K–$50K</span><div class="rank-bar-track"><div class="rank-bar" style="width:18%;background:var(--chart-2)"></div></div><span class="rank-val">18%</span></div>
+          <div class="rank-item"><span class="rank-name">$50K+</span><div class="rank-bar-track"><div class="rank-bar" style="width:10%;background:var(--accent-amber)"></div></div><span class="rank-val">10%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title glow-sm">Trading Volume Distribution</div>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-name">&lt; $1K</span><div class="rank-bar-track"><div class="rank-bar" style="width:35%;background:var(--chart-4)"></div></div><span class="rank-val">35%</span></div>
+          <div class="rank-item"><span class="rank-name">$1K–$10K</span><div class="rank-bar-track"><div class="rank-bar" style="width:28%;background:var(--chart-1)"></div></div><span class="rank-val">28%</span></div>
+          <div class="rank-item"><span class="rank-name">$10K–$100K</span><div class="rank-bar-track"><div class="rank-bar" style="width:24%;background:var(--chart-2)"></div></div><span class="rank-val">24%</span></div>
+          <div class="rank-item"><span class="rank-name">$100K+</span><div class="rank-bar-track"><div class="rank-bar" style="width:13%;background:var(--accent-amber)"></div></div><span class="rank-val">13%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2-half" style="margin-top:16px;">
+      <div class="card">
+        <div class="card-title glow-sm">Top Chains</div>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-name">Ethereum</span><div class="rank-bar-track"><div class="rank-bar" style="width:38%;background:#627eea"></div></div><span class="rank-val">38%</span></div>
+          <div class="rank-item"><span class="rank-name">Base</span><div class="rank-bar-track"><div class="rank-bar" style="width:22%;background:#0052ff"></div></div><span class="rank-val">22%</span></div>
+          <div class="rank-item"><span class="rank-name">Arbitrum</span><div class="rank-bar-track"><div class="rank-bar" style="width:16%;background:#28a0f0"></div></div><span class="rank-val">16%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title glow-sm">Top Segment Overlap</div>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-name">Long-term Holders</span><div class="rank-bar-track"><div class="rank-bar" style="width:62%;background:var(--chart-1)"></div></div><span class="rank-val">62%</span></div>
+          <div class="rank-item"><span class="rank-name">DEX Traders</span><div class="rank-bar-track"><div class="rank-bar" style="width:48%;background:var(--chart-2)"></div></div><span class="rank-val">48%</span></div>
+          <div class="rank-item"><span class="rank-name">Stablecoin Spenders</span><div class="rank-bar-track"><div class="rank-bar" style="width:35%;background:var(--chart-3)"></div></div><span class="rank-val">35%</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end seg-value -->
+  <div style="margin-top:20px;text-align:right;"><span class="analytics-link" style="cursor:default;">These segments can be used as targeting criteria in Campaign Launch Manager</span></div>
+</div><!-- end page-labels -->
+
+<!-- PAGE: User Analytics -->
+<div class="page" id="page-analytics">
+  <div class="main-header">
+    <h1 class="main-title glow">User Analytics</h1>
+  </div>
+
+  <!-- Chain Tab Bar -->
+  <div class="chain-tabs" id="chainTabs">
+    <span class="chain-tab active" data-chain="all">All</span>
+    <span class="chain-tab" data-chain="eth">ETH</span>
+    <span class="chain-tab" data-chain="base">Base</span>
+    <span class="chain-tab" data-chain="arb">Arbitrum</span>
+    <span class="chain-tab" data-chain="bsc">BSC</span>
+    <span class="chain-tab" data-chain="poly">Polygon</span>
+    <span class="chain-tab" data-chain="avax">Avalanche</span>
+    <span class="chain-tab" data-chain="hl">Hyperliquid</span>
+    <span class="chain-tab" data-chain="kaia">Kaia</span>
+    <span class="chain-tab" data-chain="sol">Solana</span>
+  </div>
+
+  <!-- Avg Summary -->
+  <div class="grid-4" style="grid-template-columns:repeat(5,1fr);">
+    <div class="card"><div class="card-title glow-sm">Total Users</div><div class="kpi-value glow a-val" style="font-size:26px;">301,012</div></div>
+    <div class="card"><div class="card-title glow-sm">Avg Stablecoin Portfolio</div><div class="kpi-value glow a-val" style="font-size:26px;">$3,820</div></div>
+    <div class="card"><div class="card-title glow-sm">Avg Native Token Portfolio</div><div class="kpi-value glow a-val" style="font-size:26px;">$2,940</div></div>
+    <div class="card"><div class="card-title glow-sm">Avg Other Tokens Portfolio</div><div class="kpi-value glow a-val" style="font-size:26px;">$1,670</div></div>
+    <div class="card"><div class="card-title glow-sm">Avg Available Value <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Available Assets</strong> — Average assets held by your connected users without active deployment.</div></span></div><div class="kpi-value glow a-val" style="font-size:26px;">$4,280</div></div>
+  </div>
+
+  <!-- Group Selection Bar -->
+  <div class="group-bar">
+    <div class="group-pills" id="groupPills">
+      <span class="gpill active" data-group="top5">Top 5%</span>
+      <span class="gpill" data-group="top20">Top 5–20%</span>
+      <span class="gpill" data-group="top50">Top 20–50%</span>
+      <span class="gpill" data-group="bottom50">Bottom 50%</span>
+    </div>
+    <div class="group-summary" id="groupSummary">Top 5% · 15,050 users · Avg Portfolio $142,300</div>
+  </div>
+
+  <!-- ROW 1: Asset Behavior -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">Asset Allocation</div>
+      <div class="donut-wrapper">
+        <div class="donut-container" style="width:120px;height:120px;">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-1)" stroke-width="14" stroke-dasharray="135.7 301.6" stroke-dashoffset="0"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-5)" stroke-width="14" stroke-dasharray="105.6 301.6" stroke-dashoffset="-135.7"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-6)" stroke-width="14" stroke-dasharray="60.3 301.6" stroke-dashoffset="-241.3"/>
+          </svg>
+          <div class="donut-center"><div class="donut-center-label">Split</div><div class="donut-center-value glow-sm" style="font-size:14px;">$142K</div></div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-1)"></span>Stables<span class="legend-value">45%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-5)"></span>Native<span class="legend-value">35%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-6)"></span>Others<span class="legend-value">20%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Funding Sources</div>
+      <div class="donut-wrapper">
+        <div class="donut-container" style="width:120px;height:120px;">
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-2)" stroke-width="14" stroke-dasharray="165.9 301.6" stroke-dashoffset="0"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-3)" stroke-width="14" stroke-dasharray="90.5 301.6" stroke-dashoffset="-165.9"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--chart-4)" stroke-width="14" stroke-dasharray="45.2 301.6" stroke-dashoffset="-256.4"/>
+          </svg>
+          <div class="donut-center"><div class="donut-center-label">Source</div><div class="donut-center-value glow-sm" style="font-size:14px;">Top 3</div></div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-2)"></span>CEX<span class="legend-value">55%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-3)"></span>Bridge<span class="legend-value">30%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--chart-4)"></span>Wallet<span class="legend-value">15%</span></div>
+        </div>
+      </div>
+      <div class="kpi-tags" style="margin-top:12px;justify-content:center;"><span class="kpi-tag">Binance</span><span class="kpi-tag">OKX</span><span class="kpi-tag">Bybit</span></div>
+    </div>
+  </div>
+
+  <!-- ROW 2: DeFi & NFT -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">DeFi Engagement</div>
+      <div class="quad-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="quad-item"><div class="quad-label">Avg DeFi TVL</div><div class="quad-value">$68,200</div></div>
+        <div class="quad-item"><div class="quad-label">Unclaimed Rewards</div><div class="quad-value">$4,120</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="quad-label" style="margin-bottom:6px;">DeFi Category Split</div>
+        <div class="analytics-bar-label" style="font-size:10px;"><span>LP <b>35%</b></span><span>Lending <b>28%</b></span><span>Staking <b>25%</b></span><span>Vault <b>12%</b></span></div>
+        <div class="bar-track" style="height:20px;margin-top:4px;">
+          <div class="bar-segment" style="width:35%;background:var(--chart-1)"></div>
+          <div class="bar-segment" style="width:28%;background:var(--chart-2)"></div>
+          <div class="bar-segment" style="width:25%;background:var(--chart-3)"></div>
+          <div class="bar-segment" style="width:12%;background:var(--chart-5)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">NFT Holdings</div>
+      <div class="quad-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="quad-item"><div class="quad-label">Avg NFT Count</div><div class="quad-value">12.4</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Portfolio Value</div><div class="quad-value">$18,300</div></div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="quad-label" style="margin-bottom:6px;">Top Collections</div>
+        <div class="kpi-tags"><span class="kpi-tag">BAYC</span><span class="kpi-tag">Azuki</span><span class="kpi-tag">Pudgy Penguins</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: Spending & Transfers -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">Gas Spending</div>
+      <div class="triple-grid">
+        <div class="quad-item"><div class="quad-label">Avg Total Gas</div><div class="quad-value">$1,840</div></div>
+        <div class="quad-item"><div class="quad-label">Avg 30d Gas</div><div class="quad-value">$312</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Gas/Tx</div><div class="quad-value">$4.80</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Transfer Patterns</div>
+      <div class="triple-grid">
+        <div class="quad-item"><div class="quad-label">Avg Inflow <span style="color:var(--accent-teal)">▲</span></div><div class="quad-value">$86,400</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Outflow <span style="color:var(--accent-red)">▼</span></div><div class="quad-value">$71,200</div></div>
+        <div class="quad-item"><div class="quad-label">Unique Counterparts</div><div class="quad-value">47</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 4: Trading Behavior -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">Trading Summary</div>
+      <div class="quad-grid">
+        <div class="quad-item"><div class="quad-label">Avg Lifetime Vol</div><div class="quad-value">$284,000</div></div>
+        <div class="quad-item"><div class="quad-label">Avg 30d Vol</div><div class="quad-value">$62,100</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Trade Size</div><div class="quad-value">$4,200</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Swaps (30d)</div><div class="quad-value">42</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Most Used DEX Protocols</div>
+      <div class="rank-list">
+        <div class="rank-item"><span class="rank-name">Pendle Finance</span><div class="rank-bar-track"><div class="rank-bar" style="width:72%;background:var(--chart-1)"></div></div><span class="rank-val">72%</span></div>
+        <div class="rank-item"><span class="rank-name">Pendle Finance</span><div class="rank-bar-track"><div class="rank-bar" style="width:48%;background:var(--chart-2)"></div></div><span class="rank-val">48%</span></div>
+        <div class="rank-item"><span class="rank-name">PancakeSwap</span><div class="rank-bar-track"><div class="rank-bar" style="width:35%;background:var(--chart-3)"></div></div><span class="rank-val">35%</span></div>
+        <div class="rank-item"><span class="rank-name">Curve</span><div class="rank-bar-track"><div class="rank-bar" style="width:22%;background:var(--chart-5)"></div></div><span class="rank-val">22%</span></div>
+        <div class="rank-item"><span class="rank-name">SushiSwap</span><div class="rank-bar-track"><div class="rank-bar" style="width:15%;background:var(--chart-6)"></div></div><span class="rank-val">15%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 5: Wallet Profile -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">Wallet Type Distribution <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Wallet classification based on chain activity:</strong><br><strong>Fresh</strong> — Recently created, no significant on-chain activity<br><strong>Kaia Only</strong> — Active exclusively on Kaia chain<br><strong>EVM Only</strong> — Active on a single EVM chain<br><strong>Multi-chain</strong> — Active across 2 or more chains</div></span></div>
+      <div class="analytics-bar-label"><span>Fresh <b>8%</b></span><span>Kaia Only <b>5%</b></span><span>EVM Only <b>42%</b></span><span>Multi-chain <b>45%</b></span></div>
+      <div class="bar-track" style="height:24px;margin-top:8px;">
+        <div class="bar-segment" style="width:8%;background:var(--chart-4)"></div>
+        <div class="bar-segment" style="width:5%;background:var(--chart-3)"></div>
+        <div class="bar-segment" style="width:42%;background:var(--chart-1)"></div>
+        <div class="bar-segment" style="width:45%;background:var(--chart-2)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">Spending Tier Distribution</div>
+      <div class="analytics-bar-label"><span>Whale <b>12%</b></span><span>High <b>28%</b></span><span>Med <b>35%</b></span><span>Low <b>18%</b></span><span>Inactive <b>7%</b></span></div>
+      <div class="bar-track" style="height:24px;margin-top:8px;">
+        <div class="bar-segment" style="width:12%;background:var(--accent-amber)"></div>
+        <div class="bar-segment" style="width:28%;background:var(--accent-orange)"></div>
+        <div class="bar-segment" style="width:35%;background:var(--chart-1)"></div>
+        <div class="bar-segment" style="width:18%;background:var(--chart-2)"></div>
+        <div class="bar-segment" style="width:7%;background:var(--text-muted)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 6: Activity & Dormancy -->
+  <div class="grid-2-half">
+    <div class="card">
+      <div class="card-title glow-sm">Activity Profile</div>
+      <div class="quad-grid">
+        <div class="quad-item"><div class="quad-label">Avg Tx/Week</div><div class="quad-value">24.6</div></div>
+        <div class="quad-item"><div class="quad-label">Most Active Hour</div><div class="quad-value">14:00 UTC</div></div>
+        <div class="quad-item"><div class="quad-label">Most Active Day</div><div class="quad-value">Tuesday</div></div>
+        <div class="quad-item"><div class="quad-label">Avg Wallet Age</div><div class="quad-value">218 days</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title glow-sm">User Activity Status</div>
+      <div class="analytics-bar-label"><span>Active 7d <b>38%</b></span><span>Active 30d <b>26%</b></span><span>Active 90d <b>17%</b></span><span>Inactive 90d+ <b>19%</b></span></div>
+      <div class="bar-track" style="height:24px;margin-top:8px;">
+        <div class="bar-segment" style="width:38%;background:var(--accent-teal)"></div>
+        <div class="bar-segment" style="width:26%;background:var(--chart-1)"></div>
+        <div class="bar-segment" style="width:17%;background:var(--accent-amber)"></div>
+        <div class="bar-segment" style="width:19%;background:var(--accent-red)"></div>
+      </div>
+      <div class="bar-legend" style="margin-top:8px;">
+        <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--accent-teal)"></span>5,724 users</span>
+        <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--chart-1)"></span>3,913 users</span>
+        <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--accent-amber)"></span>2,559 users</span>
+        <span class="bar-legend-item"><span class="bar-legend-dot" style="background:var(--accent-red)"></span>2,860 users</span>
+      </div>
+    </div>
+  </div>
+</div><!-- end page-analytics -->
+
+<!-- PAGE: Campaign Launch Manager -->
+<div class="page" id="page-campaigns">
+  <div class="main-header">
+    <h1 class="main-title glow">Campaign Launch Manager</h1>
+  </div>
+
+  <!-- Campaign List -->
+  <div class="camp-list-header">
+    <span class="camp-list-title">Your Campaigns</span>
+    <div class="camp-filters">
+      <span class="fpill active" data-cstatus="all" onclick="filterCampaigns(this,'all')">All</span>
+      <span class="fpill" data-cstatus="draft" onclick="filterCampaigns(this,'draft')">Draft</span>
+      <span class="fpill" data-cstatus="live" onclick="filterCampaigns(this,'live')">Live</span>
+      <span class="fpill" data-cstatus="ended" onclick="filterCampaigns(this,'ended')">Ended</span>
+    </div>
+  </div>
+
+  <div class="camp-cards" id="campCards">
+    <div class="camp-card" data-status="live">
+      <div class="camp-card-top">
+        <div><div class="camp-partner">Pendle Finance</div><div class="camp-name">Yield Booster</div></div>
+        <div class="camp-badges"><span class="camp-type-badge">Yield Boost</span><span class="camp-status-badge live">Live</span></div>
+      </div>
+      <div class="camp-card-meta">
+        <span>Target: 15,050 users</span><span>Jan 30 – Mar 1, 2026</span>
+      </div>
+    </div>
+    <div class="camp-card" data-status="live">
+      <div class="camp-card-top">
+        <div><div class="camp-partner">Pendle Finance</div><div class="camp-name">Lending Cashback</div></div>
+        <div class="camp-badges"><span class="camp-type-badge">Cashback</span><span class="camp-status-badge live">Live</span></div>
+      </div>
+      <div class="camp-card-meta">
+        <span>Target: 42,150 users</span><span>Feb 1 – Apr 30, 2026</span>
+      </div>
+    </div>
+    <div class="camp-card" data-status="ended">
+      <div class="camp-card-top">
+        <div><div class="camp-partner">Pendle Finance</div><div class="camp-name">Early Access V4</div></div>
+        <div class="camp-badges"><span class="camp-type-badge">Early Access</span><span class="camp-status-badge ended">Ended</span></div>
+      </div>
+      <div class="camp-card-meta">
+        <span>Target: 8,200 users</span><span>Nov 1 – Dec 31, 2025</span>
+      </div>
+    </div>
+    <div class="camp-card" data-status="draft">
+      <div class="camp-card-top">
+        <div><div class="camp-partner">Pendle Finance</div><div class="camp-name">Fee Discount Program</div></div>
+        <div class="camp-badges"><span class="camp-type-badge">Fee Discount</span><span class="camp-status-badge draft">Draft</span></div>
+      </div>
+      <div class="camp-card-meta">
+        <span>Target: — users</span><span>Not scheduled</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Creation Form -->
+  <div class="camp-list-header" style="margin-top:28px;">
+    <span class="camp-list-title">Create New Campaign</span>
+  </div>
+  <div class="camp-form-wrapper">
+    <!-- Step headers inside -->
+
+    <!-- Step 1 -->
+    <div class="camp-step">
+      <div class="camp-step-header"><span class="step-num">1</span> Basic Info</div>
+      <div class="camp-form-grid">
+        <div class="camp-field">
+          <label class="camp-label">Partner Name</label>
+          <input type="text" class="camp-input" placeholder="e.g. Pendle Finance">
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">Campaign Name</label>
+          <input type="text" class="camp-input" placeholder="e.g. Yield Booster">
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">Campaign Type</label>
+          <select class="camp-select" id="campType" onchange="toggleCustomType()">
+            <option>Airdrop</option><option>Yield Boost</option><option>Cashback</option><option>Staking Reward</option><option>Fee Discount</option><option>Referral Bonus</option><option>Loyalty Reward</option><option>Early Access</option><option>Custom</option>
+          </select>
+        </div>
+        <div class="camp-field" id="customTypeField" style="display:none;">
+          <label class="camp-label">Custom Type Name</label>
+          <input type="text" class="camp-input" placeholder="Enter custom type">
+        </div>
+      </div>
+      <div class="camp-field" style="margin-top:12px;">
+        <label class="camp-label">Description</label>
+        <textarea class="camp-textarea" placeholder="Describe the campaign benefits for users..."></textarea>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="camp-step">
+      <div class="camp-step-header"><span class="step-num">2</span> Target Audience</div>
+
+      <div class="seg-tabs" style="margin-bottom:14px;">
+        <span class="seg-tab active" data-ctab="cbehavior" onclick="switchCampTab(this)">By Behavior</span>
+        <span class="seg-tab" data-ctab="cvalue" onclick="switchCampTab(this)">By Value</span>
+      </div>
+      <div class="camp-or-note">Select one tab — By Behavior or By Value</div>
+
+      <div class="cseg-panel active" id="cseg-cbehavior">
+        <div class="camp-field">
+          <label class="camp-label">Segments</label>
+          <div class="filter-pills camp-pills" id="campSegPills"></div>
+        </div>
+        <div class="camp-field" style="margin-top:10px;">
+          <label class="camp-label">Chains</label>
+          <div class="filter-pills">
+            <span class="fpill active" data-cc="all">All</span><span class="fpill" data-cc="eth">ETH</span><span class="fpill" data-cc="base">Base</span><span class="fpill" data-cc="arb">Arbitrum</span><span class="fpill" data-cc="bsc">BSC</span><span class="fpill" data-cc="poly">Polygon</span><span class="fpill" data-cc="avax">Avalanche</span><span class="fpill" data-cc="hl">Hyperliquid</span><span class="fpill" data-cc="kaia">Kaia</span><span class="fpill" data-cc="sol">Solana</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cseg-panel" id="cseg-cvalue">
+        <div class="camp-field">
+          <label class="camp-label">Percentile By</label>
+          <div class="filter-pills" id="campPercByPills">
+            <span class="fpill active" data-cpb="all">All</span><span class="fpill" data-cpb="portfolio">Portfolio Value</span><span class="fpill" data-cpb="trading">Trading Volume</span><span class="fpill" data-cpb="txfreq">Tx Frequency</span><span class="fpill" data-cpb="age">Wallet Age</span>
+          </div>
+        </div>
+        <div class="camp-field" style="margin-top:10px;">
+          <label class="camp-label">Asset Type</label>
+          <div class="filter-pills" id="campAssetPills">
+            <span class="fpill active" data-cat="all">All</span><span class="fpill" data-cat="stables">Stables</span><span class="fpill" data-cat="native">Native</span><span class="fpill" data-cat="others">Others</span>
+          </div>
+        </div>
+        <div class="camp-field" style="margin-top:10px;">
+          <label class="camp-label">Percentile Range</label>
+          <div class="filter-pills" id="campPercRangePills">
+            <span class="fpill active" data-cpr="all">All Users</span><span class="fpill" data-cpr="5">Top 5%</span><span class="fpill" data-cpr="10">Top 10%</span><span class="fpill" data-cpr="20">Top 20%</span><span class="fpill" data-cpr="50">Top 50%</span>
+          </div>
+        </div>
+        <div class="camp-field" style="margin-top:10px;">
+          <label class="camp-label">Available Value Filter <span class="info-icon">ⓘ<div class="info-tooltip"><strong>Available Assets</strong> — Filter by assets not staked, lent, or providing liquidity. Combined as AND condition with above filters.</div></span></label>
+          <div class="filter-pills" id="campTivPills">
+            <span class="fpill active" data-ctiv="all">All</span><span class="fpill" data-ctiv="1k">Avail &gt; $1K</span><span class="fpill" data-ctiv="10k">Avail &gt; $10K</span><span class="fpill" data-ctiv="50k">Avail &gt; $50K</span><span class="fpill" data-ctiv="100k">Avail &gt; $100K</span>
+          </div>
+        </div>
+        <div class="camp-field" style="margin-top:10px;">
+          <label class="camp-label">Chains</label>
+          <div class="filter-pills">
+            <span class="fpill active" data-cc2="all">All</span><span class="fpill" data-cc2="eth">ETH</span><span class="fpill" data-cc2="base">Base</span><span class="fpill" data-cc2="arb">Arbitrum</span><span class="fpill" data-cc2="bsc">BSC</span><span class="fpill" data-cc2="poly">Polygon</span><span class="fpill" data-cc2="avax">Avalanche</span><span class="fpill" data-cc2="hl">Hyperliquid</span><span class="fpill" data-cc2="kaia">Kaia</span><span class="fpill" data-cc2="sol">Solana</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="camp-form-grid" style="margin-top:14px;">
+        <div class="camp-field">
+          <label class="camp-label">Sybil Risk Tolerance</label>
+          <select class="camp-select" id="sybilSelect" onchange="updateSybilPreview()"><option value="strict">Strict — Low risk only</option><option value="moderate" selected>Moderate — Medium and below</option><option value="relaxed">Relaxed — High and below</option></select>
+          <div class="sybil-preview" id="sybilPreview" style="font-size:11px;color:var(--accent-amber);margin-top:6px;">~5,200 users filtered out</div>
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">Estimated Reach</label>
+          <div class="camp-reach">~45,200 users</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="camp-step">
+      <div class="camp-step-header"><span class="step-num">3</span> Campaign Details</div>
+      <div class="camp-form-grid">
+        <div class="camp-field">
+          <label class="camp-label">Start Date</label>
+          <input type="date" class="camp-input">
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">End Date</label>
+          <input type="date" class="camp-input">
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">Partner Link URL</label>
+          <input type="text" class="camp-input" placeholder="https://partner.com/campaign">
+        </div>
+        <div class="camp-field">
+          <label class="camp-label">CTA Button Label</label>
+          <select class="camp-select" id="ctaSelect" onchange="toggleCustomCta()">
+            <option selected>Join Campaign</option><option>Learn More</option><option>Claim Now</option><option>Opt In</option><option>Boost Now</option><option>Get Started</option><option>Apply Now</option><option>Custom</option>
+          </select>
+        </div>
+        <div class="camp-field" id="customCtaField" style="display:none;">
+          <label class="camp-label">Custom CTA Text</label>
+          <input type="text" class="camp-input" placeholder="Enter button text">
+        </div>
+      </div>
+
+      <div class="camp-elig" style="margin-top:14px;">
+        <label class="camp-label">Eligibility Summary <span style="font-size:10px;color:var(--text-muted);">(visible to partners only)</span></label>
+        <div class="camp-elig-box">DEX Traders · Top 5% · Ethereum · Moderate Sybil</div>
+      </div>
+
+      <div class="camp-toggle-row" style="margin-top:12px;">
+        <label class="camp-label">Access Control (API filtering)</label>
+        <div class="camp-toggle">
+          <input type="checkbox" id="accessToggle" checked><label for="accessToggle" class="toggle-label"><span class="toggle-inner"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="camp-submit">
+      <button class="camp-btn draft">Save as Draft</button>
+      <button class="camp-btn launch">Launch Campaign</button>
+    </div>
+  </div>
+</div><!-- end page-campaigns -->
+
+</main>
+
+<script>
+// ===== Label Data =====
+const labels = [
+  {id:1,name:"DeFi Stakers (Stables)",users:18420,pct:6.1,threshold:"≥ $10,000 staked",chains:{eth:40,base:20,arb:15,bsc:10,poly:5,avax:4,hl:2,kaia:2,sol:2},avgBal:14200,txFreq:22,retention:78},
+  {id:2,name:"DeFi Stakers (Native)",users:15330,pct:5.1,threshold:"≥ $10,000 staked",chains:{eth:45,base:18,arb:12,bsc:10,poly:5,avax:4,hl:2,kaia:2,sol:2},avgBal:18400,txFreq:19,retention:74},
+  {id:3,name:"DeFi Stakers (Others)",users:9210,pct:3.1,threshold:"≥ $5,000 staked",chains:{eth:35,base:22,arb:18,bsc:8,poly:7,avax:4,hl:2,kaia:2,sol:2},avgBal:8300,txFreq:15,retention:68},
+  {id:4,name:"DEX Traders",users:42150,pct:14.0,threshold:"≥ 50 tx/month",chains:{eth:30,base:25,arb:20,bsc:8,poly:5,avax:3,hl:5,kaia:2,sol:2},avgBal:6200,txFreq:72,retention:85},
+  {id:5,name:"Liquidity Providers",users:12080,pct:4.0,threshold:"≥ $10,000 LP",chains:{eth:42,base:20,arb:15,bsc:10,poly:5,avax:3,hl:2,kaia:1,sol:2},avgBal:22100,txFreq:18,retention:71},
+  {id:6,name:"Long-term Holders",users:67200,pct:22.3,threshold:"≥ 30 days held",chains:{eth:38,base:15,arb:12,bsc:12,poly:8,avax:5,hl:2,kaia:4,sol:4},avgBal:5100,txFreq:4,retention:62},
+  {id:7,name:"Stablecoin Spenders",users:38900,pct:12.9,threshold:"≥ $1,000/month",chains:{eth:35,base:22,arb:10,bsc:12,poly:8,avax:3,hl:2,kaia:4,sol:4},avgBal:3800,txFreq:34,retention:79},
+  {id:8,name:"Stablecoin Whales",users:4210,pct:1.4,threshold:"≥ $50,000 balance",chains:{eth:55,base:12,arb:8,bsc:10,poly:5,avax:4,hl:2,kaia:2,sol:2},avgBal:142000,txFreq:28,retention:88},
+  {id:9,name:"Native Token Whales",users:3890,pct:1.3,threshold:"≥ $50,000 balance",chains:{eth:50,base:15,arb:10,bsc:8,poly:5,avax:5,hl:3,kaia:2,sol:2},avgBal:168000,txFreq:22,retention:82},
+  {id:10,name:"NFT Whales",users:2150,pct:0.7,threshold:"≥ $50,000 portfolio",chains:{eth:60,base:15,arb:5,bsc:5,poly:5,avax:2,hl:1,kaia:3,sol:4},avgBal:94000,txFreq:12,retention:76},
+  {id:11,name:"Paper Hands",users:28700,pct:9.5,threshold:"≤ 7 days avg hold",chains:{eth:28,base:25,arb:18,bsc:10,poly:7,avax:4,hl:3,kaia:3,sol:2},avgBal:1800,txFreq:48,retention:54},
+  {id:12,name:"Cherry Pickers",users:8430,pct:2.8,threshold:"≥ 80% sold within 24h",chains:{eth:32,base:28,arb:20,bsc:8,poly:5,avax:3,hl:2,kaia:1,sol:1},avgBal:2400,txFreq:38,retention:42},
+  {id:13,name:"High Frequency Wallets",users:19800,pct:6.6,threshold:"≥ 100 tx/month",chains:{eth:30,base:25,arb:18,bsc:10,poly:5,avax:3,hl:5,kaia:2,sol:2},avgBal:7800,txFreq:142,retention:91},
+  {id:14,name:"Sybil",users:5620,pct:1.9,threshold:"Flagged by Risk module",chains:{eth:35,base:30,arb:15,bsc:8,poly:5,avax:3,hl:1,kaia:2,sol:1},avgBal:820,txFreq:88,retention:67},
+  {id:15,name:"Bridge Users",users:34500,pct:11.5,threshold:"≥ 1 bridge tx/30d",chains:{eth:30,base:25,arb:20,bsc:8,poly:7,avax:4,hl:2,kaia:2,sol:2},avgBal:5600,txFreq:26,retention:73},
+  {id:16,name:"Airdrop Hunters",users:11200,pct:3.7,threshold:"≥ 3 protocols/90d",chains:{eth:28,base:30,arb:22,bsc:5,poly:5,avax:4,hl:3,kaia:1,sol:2},avgBal:1200,txFreq:52,retention:58},
+  {id:17,name:"Dormant Wallets",users:45100,pct:15.0,threshold:"≥ 90 days inactive",chains:{eth:40,base:12,arb:10,bsc:15,poly:8,avax:5,hl:1,kaia:5,sol:4},avgBal:2200,txFreq:0,retention:0},
+  {id:18,name:"New Wallets",users:22300,pct:7.4,threshold:"≤ 30 days old",chains:{eth:25,base:30,arb:18,bsc:8,poly:7,avax:4,hl:3,kaia:3,sol:2},avgBal:980,txFreq:14,retention:64},
+  {id:19,name:"Governance Participants",users:6700,pct:2.2,threshold:"≥ 1 vote/90d",chains:{eth:50,base:15,arb:15,bsc:5,poly:5,avax:4,hl:2,kaia:2,sol:2},avgBal:18200,txFreq:16,retention:81},
+  {id:20,name:"Rapid Growth Wallets",users:7800,pct:2.6,threshold:"≥ 500% balance growth/30d (min $100)",chains:{eth:30,base:28,arb:18,bsc:8,poly:5,avax:4,hl:3,kaia:2,sol:2},avgBal:4100,txFreq:32,retention:72}
+];
+
+const chainColors = {eth:'#627eea',base:'#0052ff',arb:'#28a0f0',bsc:'#f0b90b',poly:'#8247e5',avax:'#e84142',hl:'#00d1b2',kaia:'#3fbb7a',sol:'#9945ff'};
+const chainKeys = ['eth','base','arb','bsc','poly','avax','hl','kaia','sol'];
+const selectedLabels = new Set();
+const selectedChains = new Set();
+const selectedAssets = new Set();
+
+function getFilteredLabels() {
+  return labels.filter(l => selectedLabels.size === 0 || selectedLabels.has(l.id));
+}
+
+function computeFilteredUsers() {
+  const fl = getFilteredLabels();
+  if(selectedLabels.size === 0) return 301012;
+  let total = 0;
+  fl.forEach(l => {
+    let u = l.users;
+    if(selectedChains.size > 0) {
+      let chainPct = 0;
+      selectedChains.forEach(c => { chainPct += (l.chains[c]||0); });
+      u = Math.round(u * chainPct / 100);
+    }
+    total += u;
+  });
+  // overlap deduction
+  if(selectedLabels.size > 1) total = Math.round(total * (1 - 0.08 * (selectedLabels.size - 1)));
+  return Math.max(total, 0);
+}
+
+function renderLabelCards() {
+  const grid = document.getElementById('labelGrid');
+  grid.innerHTML = labels.map(l => {
+    const chainBar = Object.entries(l.chains).map(([c,v]) =>
+      `<div style="width:${v}%;height:100%;background:${chainColors[c]||'#555'}"></div>`
+    ).join('');
+    const sel = selectedLabels.has(l.id);
+    // adjust user count by chain filter
+    let displayUsers = l.users;
+    if(selectedChains.size > 0) {
+      let chainPct = 0;
+      selectedChains.forEach(c => { chainPct += (l.chains[c]||0); });
+      displayUsers = Math.round(l.users * chainPct / 100);
+    }
+    const displayPct = (displayUsers / 301012 * 100).toFixed(1);
+    return `
+      <div class="label-card ${sel?'selected':''}" data-id="${l.id}" onclick="toggleLabel(${l.id})">
+        <div class="label-card-top">
+          <div class="label-card-left">
+            <div class="label-checkbox">${sel?'✓':''}</div>
+            <span class="label-card-name">${l.name}</span>
+          </div>
+          <span class="label-card-count">${displayUsers.toLocaleString()}</span>
+        </div>
+        <div class="label-card-pct">${displayPct}% of total</div>
+        <div class="label-chain-bar">${chainBar}</div>
+        <div class="label-threshold">${l.threshold}</div>
+      </div>`;
+  }).join('');
+}
+
+function animateValue(el, newVal) {
+  el.classList.remove('count-animate');
+  void el.offsetWidth;
+  el.textContent = newVal;
+  el.classList.add('count-animate');
+}
+
+function toggleLabel(id) {
+  if(selectedLabels.has(id)) selectedLabels.delete(id); else selectedLabels.add(id);
+  renderLabelCards();
+  updateSummary();
+}
+
+function updateSummary() {
+  const selLabels = selectedLabels.size;
+  const totalUsers = computeFilteredUsers();
+  const fl = getFilteredLabels();
+
+  // Filter summary bar
+  const chainCount = selectedChains.size;
+  document.getElementById('filterSummary').innerHTML =
+    `<span class="summary-highlight">${selLabels||'All'} labels</span> · ` +
+    `<span class="summary-highlight">${chainCount ? chainCount + ' chains' : 'All chains'}</span> · ` +
+    `<span class="summary-highlight">${totalUsers.toLocaleString()} users</span>`;
+
+  // Selected pills
+  const pillsEl = document.getElementById('selectedPills');
+  if(selLabels > 0) {
+    pillsEl.innerHTML = fl.filter(l=>selectedLabels.has(l.id)).map(l=>`<span class="selected-pill">${l.name}</span>`).join('');
+  } else { pillsEl.innerHTML = ''; }
+
+  // Summary grid accent
+  const sg = document.getElementById('summaryGrid');
+  if(selLabels > 0 || selectedChains.size > 0) sg.classList.add('has-filter'); else sg.classList.remove('has-filter');
+
+  // Compute real averages from selected labels
+  let avgBal = 4230, txFreq = 38, retention = 72;
+  if(selLabels > 0) {
+    let sumBal=0, sumTx=0, sumRet=0, count=fl.length;
+    fl.forEach(l => { if(selectedLabels.has(l.id)) { sumBal+=l.avgBal; sumTx+=l.txFreq; sumRet+=l.retention; }});
+    count = selLabels;
+    avgBal = Math.round(sumBal/count);
+    txFreq = Math.round(sumTx/count);
+    retention = Math.round(sumRet/count);
+  }
+
+  animateValue(document.getElementById('sumUsers'), totalUsers.toLocaleString());
+  animateValue(document.getElementById('sumBalance'), '$' + avgBal.toLocaleString());
+  animateValue(document.getElementById('sumTxFreq'), txFreq + '/mo');
+  animateValue(document.getElementById('sumRetention'), retention + '%');
+}
+
+// Filter pill logic
+function setupPills(containerId, stateSet, dataAttr) {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.addEventListener('click', e => {
+    const pill = e.target.closest('.fpill');
+    if(!pill) return;
+    const val = pill.dataset[dataAttr];
+    if(val === 'all') {
+      stateSet.clear();
+      document.querySelectorAll(`#${containerId} .fpill`).forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    } else {
+      document.querySelector(`#${containerId} .fpill[data-${dataAttr}="all"]`).classList.remove('active');
+      pill.classList.toggle('active');
+      if(pill.classList.contains('active')) stateSet.add(val); else stateSet.delete(val);
+      if(stateSet.size === 0) document.querySelector(`#${containerId} .fpill[data-${dataAttr}="all"]`).classList.add('active');
+    }
+    renderLabelCards();
+    updateSummary();
+  });
+}
+
+// Init segments
+setupPills('chainPills', selectedChains, 'chain');
+setupPills('assetPills', selectedAssets, 'asset');
+renderLabelCards();
+
+function updateSummary() {
+  const selLabels = selectedLabels.size;
+  let totalUsers = 0;
+  if(selLabels === 0) { totalUsers = 301012; }
+  else {
+    labels.forEach(l => { if(selectedLabels.has(l.id)) totalUsers += l.users; });
+    totalUsers = Math.round(totalUsers * (0.65 + Math.random()*0.15));
+  }
+
+  // Filter summary bar
+  document.getElementById('filterSummary').innerHTML =
+    `<span class="summary-highlight">${selLabels||'All'} labels</span> · ` +
+    `<span class="summary-highlight">${selectedChains.size||'All'} chains</span> · ` +
+    `<span class="summary-highlight">${totalUsers.toLocaleString()} users</span>`;
+
+  // Selected pills
+  const pillsEl = document.getElementById('selectedPills');
+  if(selLabels > 0) {
+    pillsEl.innerHTML = labels.filter(l=>selectedLabels.has(l.id)).map(l=>`<span class="selected-pill">${l.name}</span>`).join('');
+  } else { pillsEl.innerHTML = ''; }
+
+  // Summary grid accent
+  const sg = document.getElementById('summaryGrid');
+  if(selLabels > 0) sg.classList.add('has-filter'); else sg.classList.remove('has-filter');
+
+  // Animate values
+  const avgBal = selLabels > 0 ? Math.round(2000 + Math.random()*8000) : 4230;
+  const txFreq = selLabels > 0 ? Math.round(15 + Math.random()*60) : 38;
+  const retention = selLabels > 0 ? Math.round(45 + Math.random()*40) : 72;
+
+  animateValue(document.getElementById('sumUsers'), totalUsers.toLocaleString());
+  animateValue(document.getElementById('sumBalance'), '$' + avgBal.toLocaleString());
+  animateValue(document.getElementById('sumTxFreq'), txFreq + '/mo');
+  animateValue(document.getElementById('sumRetention'), retention + '%');
+}
+
+// Campaign page functions
+function filterCampaigns(el, status) {
+  document.querySelectorAll('.camp-filters .fpill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.camp-card').forEach(c => {
+    c.style.display = (status === 'all' || c.dataset.status === status) ? '' : 'none';
+  });
+}
+
+function toggleCustomType() {
+  document.getElementById('customTypeField').style.display = document.getElementById('campType').value === 'Custom' ? '' : 'none';
+}
+
+function toggleCustomCta() {
+  document.getElementById('customCtaField').style.display = document.getElementById('ctaSelect').value === 'Custom' ? '' : 'none';
+}
+
+function switchCampTab(tab) {
+  document.querySelectorAll('[data-ctab]').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cseg-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('cseg-' + tab.dataset.ctab)?.classList.add('active');
+}
+
+// Populate segment pills in campaign form
+(function() {
+  const container = document.getElementById('campSegPills');
+  if(!container || typeof labels === 'undefined') return;
+  container.innerHTML = labels.map(l =>
+    `<span class="fpill" data-cseg-id="${l.id}">${l.name}</span>`
+  ).join('');
+  container.addEventListener('click', e => {
+    const pill = e.target.closest('.fpill');
+    if(pill) pill.classList.toggle('active');
+  });
+})();
+
+// Campaign pill handlers (By Value + Chains)
+['campPercByPills','campAssetPills','campPercRangePills','campTivPills'].forEach(id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click', e => {
+    const pill = e.target.closest('.fpill'); if(!pill) return;
+    const attr = Object.keys(pill.dataset)[0];
+    const val = pill.dataset[attr];
+    if(val === 'all') { el.querySelectorAll('.fpill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }
+    else { el.querySelector('.fpill[data-'+attr+'="all"]').classList.remove('active'); pill.classList.toggle('active'); if(!el.querySelector('.fpill.active:not([data-'+attr+'="all"])')) el.querySelector('.fpill[data-'+attr+'="all"]').classList.add('active'); }
+  });
+});
+
+// Campaign chain pills (both tabs)
+document.querySelectorAll('#page-campaigns .filter-pills').forEach(container => {
+  const pills = container.querySelectorAll('.fpill[data-cc], .fpill[data-cc2]');
+  if(pills.length === 0) return;
+  container.addEventListener('click', e => {
+    const pill = e.target.closest('.fpill'); if(!pill) return;
+    const attr = pill.dataset.cc !== undefined ? 'cc' : pill.dataset.cc2 !== undefined ? 'cc2' : null;
+    if(!attr) return;
+    const val = pill.dataset[attr];
+    if(val === 'all') { container.querySelectorAll('.fpill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }
+    else { container.querySelector('.fpill[data-'+attr+'="all"]').classList.remove('active'); pill.classList.toggle('active'); if(!container.querySelector('.fpill.active:not([data-'+attr+'="all"])')) container.querySelector('.fpill[data-'+attr+'="all"]').classList.add('active'); }
+  });
+});
+
+// Nav: include campaigns CTA
+document.querySelector('.nav-cta[data-page]')?.addEventListener('click', e => {
+  e.preventDefault();
+  const page = 'campaigns';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if(target) target.classList.add('active');
+  updateBotMode('campaigns');
+  setTimeout(updateEstimatedReach, 100);
+});
+
+function goToAnalytics(e) {
+  e.preventDefault();
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('.nav-item[data-page="analytics"]').classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-analytics').classList.add('active');
+  updateAnalytics('top5');
+  updateBotMode('analytics');
+}
+
+// Sybil preview
+function updateSybilPreview() {
+  const val = document.getElementById('sybilSelect')?.value;
+  const preview = document.getElementById('sybilPreview');
+  if(!preview) return;
+  const map = { strict: '~12,400 users filtered out', moderate: '~5,200 users filtered out', relaxed: '~1,100 users filtered out' };
+  preview.textContent = map[val] || '';
+  updateEstimatedReach();
+}
+
+// Estimated Reach dynamic
+function updateEstimatedReach() {
+  const reachEl = document.querySelector('.camp-reach');
+  if(!reachEl) return;
+  let base = 301012;
+  // Count active behavior segments
+  const segPills = document.querySelectorAll('#campSegPills .fpill.active');
+  if(segPills.length > 0) { base = Math.min(base, segPills.length * 18000); }
+  // Percentile range
+  const percPill = document.querySelector('#campPercRangePills .fpill.active:not([data-cpr="all"])');
+  if(percPill) {
+    const pMap = {'5':0.05,'10':0.1,'20':0.2,'50':0.5};
+    base = Math.floor(base * (pMap[percPill.dataset.cpr] || 1));
+  }
+  // Available value filter
+  const tivPill = document.querySelector('#campTivPills .fpill.active:not([data-ctiv="all"])');
+  if(tivPill) {
+    const tMap = {'1k':0.6,'10k':0.35,'50k':0.15,'100k':0.06};
+    base = Math.floor(base * (tMap[tivPill.dataset.ctiv] || 1));
+  }
+  // Chain filter (non-all = reduce)
+  const chainActive = document.querySelectorAll('#page-campaigns [data-cc].active:not([data-cc="all"]), #page-campaigns [data-cc2].active:not([data-cc2="all"])');
+  if(chainActive.length > 0) { base = Math.floor(base * 0.3 * chainActive.length); }
+  // Sybil
+  const sybil = document.getElementById('sybilSelect')?.value;
+  if(sybil === 'strict') base = Math.floor(base * 0.82);
+  else if(sybil === 'moderate') base = Math.floor(base * 0.93);
+  else base = Math.floor(base * 0.98);
+  // Clamp
+  base = Math.max(base, 820);
+  base = Math.min(base, 301012);
+  reachEl.textContent = '~' + base.toLocaleString() + ' users';
+}
+
+// Hook reach update to all campaign pills
+document.addEventListener('click', e => {
+  const pill = e.target.closest('#page-campaigns .fpill');
+  if(pill) setTimeout(updateEstimatedReach, 50);
+});
+
+// Launch Assistant demo simulation
+function launchAssistantDemo() {
+  const input = document.getElementById('botInput');
+  const text = (input?.value || '').toLowerCase();
+  if(!text.trim()) return;
+
+  // Show loading
+  input.disabled = true;
+  input.value = 'Setting up your campaign...';
+  input.style.color = 'var(--accent-teal)';
+
+  setTimeout(() => {
+    // Determine pattern
+    let partnerName = 'Pendle Finance';
+    let campName = 'Custom Campaign';
+    let campType = 0; // Airdrop default
+    let segments = [];
+
+    if(text.includes('yield') || text.includes('boost') || text.includes('staker') || text.includes('staking')) {
+      campName = 'Yield Booster';
+      campType = 1; // Yield Boost
+      segments = ['DeFi Stakers', 'Yield Farmers'];
+    } else if(text.includes('airdrop') || text.includes('drop')) {
+      campName = 'Token Airdrop';
+      campType = 0;
+      segments = ['Active Wallets', 'Long-term Holders'];
+    } else if(text.includes('cashback') || text.includes('spending') || text.includes('stable')) {
+      campName = 'Cashback Rewards';
+      campType = 2; // Cashback
+      segments = ['Stablecoin Whales', 'Payment Users'];
+    } else if(text.includes('fee') || text.includes('discount') || text.includes('trad')) {
+      campName = 'Fee Discount Program';
+      campType = 4; // Fee Discount
+      segments = ['DEX Traders', 'High-freq Traders'];
+    } else if(text.includes('referral') || text.includes('invite')) {
+      campName = 'Referral Bonus';
+      campType = 5;
+      segments = ['Active Wallets', 'Community Builders'];
+    } else {
+      segments = ['Active Wallets'];
+    }
+
+    // Fill Step 1
+    const inputs = document.querySelectorAll('.camp-input');
+    if(inputs[0]) inputs[0].value = partnerName;
+    if(inputs[1]) inputs[1].value = campName;
+    const typeSelect = document.getElementById('campType');
+    if(typeSelect) typeSelect.selectedIndex = campType;
+
+    const textarea = document.querySelector('.camp-textarea');
+    if(textarea) textarea.value = 'Auto-generated from: "' + text + '"';
+
+    // Fill Step 2 - activate matching segment pills
+    const segPills = document.querySelectorAll('#campSegPills .fpill');
+    segPills.forEach(p => {
+      if(segments.some(s => p.textContent.toLowerCase().includes(s.toLowerCase().split(' ')[0]))) {
+        p.classList.add('active');
+      }
+    });
+
+    // Check for chain mentions
+    const chainMap = {eth:'eth',ethereum:'eth',base:'base',arbitrum:'arb',bsc:'bsc',polygon:'poly',solana:'sol',kaia:'kaia'};
+    Object.keys(chainMap).forEach(key => {
+      if(text.includes(key)) {
+        const allPill = document.querySelector('#page-campaigns .fpill[data-cc="all"]');
+        if(allPill) allPill.classList.remove('active');
+        const chainPill = document.querySelector('#page-campaigns .fpill[data-cc="'+chainMap[key]+'"]');
+        if(chainPill) chainPill.classList.add('active');
+      }
+    });
+
+    // Check for percentile
+    if(text.includes('top 5%') || text.includes('top5')) {
+      document.querySelector('[data-ctab="cvalue"]')?.click();
+      setTimeout(() => {
+        const p5 = document.querySelector('#campPercRangePills .fpill[data-cpr="5"]');
+        const pAll = document.querySelector('#campPercRangePills .fpill[data-cpr="all"]');
+        if(pAll) pAll.classList.remove('active');
+        if(p5) p5.classList.add('active');
+      }, 100);
+    }
+
+    // Fill Step 3 - dates
+    const today = new Date();
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 30);
+    const fmt = d => d.toISOString().split('T')[0];
+    const dateInputs = document.querySelectorAll('.camp-step:last-of-type .camp-input[type="date"]');
+    if(dateInputs[0]) dateInputs[0].value = fmt(today);
+    if(dateInputs[1]) dateInputs[1].value = fmt(endDate);
+
+    updateEstimatedReach();
+
+    // Highlight filled fields
+    document.querySelectorAll('.camp-input, .camp-select, .camp-textarea').forEach(el => {
+      if(el.value) {
+        el.classList.remove('camp-field-filled');
+        void el.offsetWidth; // force reflow
+        el.classList.add('camp-field-filled');
+      }
+    });
+
+    // Reset input
+    input.disabled = false;
+    input.value = '';
+    input.style.color = '';
+
+    // Scroll to form
+    document.querySelector('.camp-form-wrapper')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 2000);
+}
+
+// Hook send button and enter key
+document.querySelector('.bot-send')?.addEventListener('click', () => {
+  const isCampaign = document.getElementById('page-campaigns')?.classList.contains('active');
+  if(isCampaign) { launchAssistantDemo(); }
+  else { showInsightsFeedback(); }
+});
+document.getElementById('botInput')?.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    const isCampaign = document.getElementById('page-campaigns')?.classList.contains('active');
+    if(isCampaign) { launchAssistantDemo(); }
+    else { showInsightsFeedback(); }
+  }
+});
+
+function showInsightsFeedback() {
+  const input = document.getElementById('botInput');
+  if(!input || !input.value.trim()) return;
+  const original = input.value;
+  input.disabled = true;
+  input.value = 'Analyzing your data...';
+  input.style.color = 'var(--accent-blue)';
+  setTimeout(() => {
+    input.value = 'Insights will be available in the live product. Try Campaign Builder to see the AI demo.';
+    input.style.color = 'var(--text-muted)';
+    setTimeout(() => {
+      input.disabled = false;
+      input.value = '';
+      input.style.color = '';
+    }, 3000);
+  }, 1500);
+}
+
+// Assistant mode switching
+const botModes = {
+  insights: {
+    name: 'Gravii Insights',
+    label: 'Data Insights',
+    cls: 'insights',
+    placeholder: "Ask about your users' data",
+    hint: 'Explore the dashboard, or type a question here.<br><br>e.g. "Which segment has the highest retention?"'
+  },
+  campaign: {
+    name: 'Launch Assistant',
+    label: 'Campaign Builder',
+    cls: 'campaign',
+    placeholder: 'Describe your campaign in plain English',
+    hint: 'Fill in the form yourself, or type here and we\'ll set it up.<br><br>e.g. "Yield boost for top 5% stakers on Ethereum"'
+  }
+};
+
+function updateBotMode(page) {
+  const mode = page === 'campaigns' ? botModes.campaign : botModes.insights;
+  const labelEl = document.getElementById('botLabel');
+  const modeEl = document.getElementById('botMode');
+  const inputEl = document.getElementById('botInput');
+  const hintEl = document.getElementById('botHint');
+  const boxEl = document.querySelector('.bot-box');
+  if(!modeEl || !inputEl || !hintEl) return;
+  if(labelEl) labelEl.textContent = mode.name;
+  modeEl.textContent = mode.label;
+  modeEl.className = 'bot-mode ' + mode.cls;
+  inputEl.placeholder = mode.placeholder;
+  inputEl.value = '';
+  hintEl.innerHTML = mode.hint;
+  if(boxEl) { boxEl.classList.toggle('campaign-glow', page === 'campaigns'); }
+}
+
+function fillBot(el) {
+  const input = document.getElementById('botInput');
+  if(input) { input.value = el.textContent; input.focus(); }
+}
+
+// Segment tabs
+document.querySelectorAll('#page-labels > .seg-tabs .seg-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#page-labels > .seg-tabs .seg-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.seg-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('seg-' + tab.dataset.seg)?.classList.add('active');
+  });
+});
+
+// Value filter pills
+const valData = {all:{users:301012,port:'$8,430',pay:'$2,327',trade:'$47,200'},u1k:{users:126425,port:'$420',pay:'$180',trade:'$2,100'},'1k10k':{users:90304,port:'$4,800',pay:'$1,400',trade:'$18,200'},'10k50k':{users:54182,port:'$24,300',pay:'$6,800',trade:'$82,000'},'50kp':{users:30101,port:'$142,000',pay:'$18,400',trade:'$284,000'}};
+['holdPills','payPills','tradePills','valAssetPills','valChainPills','tivPills'].forEach(id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click', e => {
+    const pill = e.target.closest('.fpill'); if(!pill) return;
+    const attr = Object.keys(pill.dataset).find(k=>k!=='class');
+    const val = pill.dataset[attr];
+    if(val==='all'){el.querySelectorAll('.fpill').forEach(p=>p.classList.remove('active'));pill.classList.add('active');}
+    else{el.querySelector('.fpill[data-'+attr+'="all"]').classList.remove('active');pill.classList.toggle('active');if(!el.querySelector('.fpill.active:not([data-'+attr+'="all"])'))el.querySelector('.fpill[data-'+attr+'="all"]').classList.add('active');}
+    // Update summary with simple dummy
+    const activeCount = document.querySelectorAll('#holdPills .fpill.active:not([data-hold="all"]),#payPills .fpill.active:not([data-pay="all"]),#tradePills .fpill.active:not([data-trade="all"]),#valAssetPills .fpill.active:not([data-vasset="all"]),#valChainPills .fpill.active:not([data-vchain="all"]),#tivPills .fpill.active:not([data-tiv="all"])').length;
+    const factor = activeCount > 0 ? Math.max(0.1, 1 - activeCount * 0.22) : 1;
+    const users = Math.round(301012 * factor);
+    document.getElementById('valFilterSummary').innerHTML = `<span class="summary-highlight">${activeCount||'All'} filters</span> · <span class="summary-highlight">${users.toLocaleString()} users</span>`;
+    document.getElementById('valUsers').textContent = users.toLocaleString();
+  });
+});
+
+// Page navigation
+document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    const page = item.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+    if(page === 'labels') { renderLabelCards(); updateSummary(); }
+    if(page === 'analytics') { updateAnalytics('top5'); }
+    updateBotMode(page);
+  });
+});
+
+// Table filter
+function filterTable() {
+  const val = document.getElementById('riskFilter').value;
+  document.querySelectorAll('#flaggedBody tr').forEach(row => {
+    row.style.display = (val === 'all' || row.dataset.risk === val) ? '' : 'none';
+  });
+}
+
+// Table sort
+function sortTable() {
+  const val = document.getElementById('sortFilter').value;
+  const tbody = document.getElementById('flaggedBody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => val === 'newest' ? a.dataset.time - b.dataset.time : b.dataset.time - a.dataset.time);
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Analytics: Chain tabs
+document.getElementById('chainTabs')?.addEventListener('click', e => {
+  const tab = e.target.closest('.chain-tab');
+  if(!tab) return;
+  document.querySelectorAll('.chain-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+});
+
+// Analytics: Group data with all metrics
+const gd = {
+  top5:{users:15050,stbl:'$18,200',native:'$14,800',other:'$8,400',portfolio:'$142,300',
+    ltVol:'$284,000',vol30:'$62,100',tradeSize:'$4,200',swaps:42,
+    defiTvl:'$68,200',rewards:'$4,120',nftCount:'12.4',nftVal:'$18,300',
+    gasTotal:'$1,840',gas30:'$312',gasTx:'$4.80',
+    txIn:'$86,400',txOut:'$71,200',counterparts:47,
+    txWeek:'24.6',activeHr:'14:00 UTC',activeDay:'Tuesday',walletAge:'218 days',
+    act7:38,act30:26,act90:17,inact:19,
+    wFresh:8,wKaia:5,wEvm:42,wMulti:45,
+    sWhale:12,sHigh:28,sMed:35,sLow:18,sInact:7},
+  top20:{users:45152,stbl:'$6,400',native:'$4,200',other:'$2,100',portfolio:'$38,200',
+    ltVol:'$92,000',vol30:'$18,400',tradeSize:'$1,800',swaps:28,
+    defiTvl:'$22,400',rewards:'$1,840',nftCount:'5.8',nftVal:'$6,200',
+    gasTotal:'$680',gas30:'$142',gasTx:'$3.20',
+    txIn:'$34,200',txOut:'$28,800',counterparts:31,
+    txWeek:'14.2',activeHr:'15:00 UTC',activeDay:'Wednesday',walletAge:'164 days',
+    act7:32,act30:28,act90:20,inact:20,
+    wFresh:10,wKaia:8,wEvm:48,wMulti:34,
+    sWhale:5,sHigh:22,sMed:42,sLow:24,sInact:7},
+  top50:{users:90304,stbl:'$2,800',native:'$1,600',other:'$840',portfolio:'$8,430',
+    ltVol:'$28,400',vol30:'$4,200',tradeSize:'$620',swaps:14,
+    defiTvl:'$4,800',rewards:'$420',nftCount:'2.1',nftVal:'$1,400',
+    gasTotal:'$210',gas30:'$48',gasTx:'$2.40',
+    txIn:'$8,200',txOut:'$6,800',counterparts:18,
+    txWeek:'6.8',activeHr:'16:00 UTC',activeDay:'Thursday',walletAge:'112 days',
+    act7:24,act30:26,act90:24,inact:26,
+    wFresh:14,wKaia:12,wEvm:52,wMulti:22,
+    sWhale:1,sHigh:8,sMed:38,sLow:40,sInact:13},
+  bottom50:{users:150506,stbl:'$480',native:'$320',other:'$180',portfolio:'$1,240',
+    ltVol:'$3,200',vol30:'$480',tradeSize:'$120',swaps:4,
+    defiTvl:'$620',rewards:'$42',nftCount:'0.4',nftVal:'$180',
+    gasTotal:'$38',gas30:'$8',gasTx:'$1.20',
+    txIn:'$1,400',txOut:'$1,100',counterparts:6,
+    txWeek:'1.2',activeHr:'18:00 UTC',activeDay:'Saturday',walletAge:'68 days',
+    act7:12,act30:18,act90:22,inact:48,
+    wFresh:28,wKaia:18,wEvm:42,wMulti:12,
+    sWhale:0,sHigh:2,sMed:14,sLow:42,sInact:42}
+};
+
+function updateAnalytics(key) {
+  const d = gd[key];
+  if(!d) return;
+  // Quad values by order in page
+  const qvs = document.querySelectorAll('#page-analytics .quad-value');
+  const vals = [d.defiTvl,d.rewards,d.nftCount,d.nftVal,d.gasTotal,d.gas30,d.gasTx,d.txIn,d.txOut,d.counterparts,d.ltVol,d.vol30,d.tradeSize,d.swaps,d.txWeek,d.activeHr,d.activeDay,d.walletAge];
+  qvs.forEach((el,i) => { if(vals[i]!==undefined) { el.classList.remove('count-animate'); void el.offsetWidth; el.textContent = vals[i]; el.classList.add('count-animate'); }});
+  // Wallet type bar
+  const wtBars = document.querySelectorAll('#page-analytics .grid-2-half:nth-of-type(5) .bar-segment');
+  if(wtBars.length>=4){wtBars[0].style.width=d.wFresh+'%';wtBars[1].style.width=d.wKaia+'%';wtBars[2].style.width=d.wEvm+'%';wtBars[3].style.width=d.wMulti+'%';}
+  // Spending tier bar
+  const stBars = document.querySelectorAll('#page-analytics .grid-2-half:nth-of-type(5) .card:nth-child(2) .bar-segment');
+  if(stBars.length>=5){stBars[0].style.width=d.sWhale+'%';stBars[1].style.width=d.sHigh+'%';stBars[2].style.width=d.sMed+'%';stBars[3].style.width=d.sLow+'%';stBars[4].style.width=d.sInact+'%';}
+  // Activity status bar
+  const actBars = document.querySelectorAll('#page-analytics .grid-2-half:last-of-type .card:nth-child(2) .bar-segment');
+  if(actBars.length>=4){actBars[0].style.width=d.act7+'%';actBars[1].style.width=d.act30+'%';actBars[2].style.width=d.act90+'%';actBars[3].style.width=d.inact+'%';}
+}
+
+document.getElementById('groupPills')?.addEventListener('click', e => {
+  const pill = e.target.closest('.gpill');
+  if(!pill) return;
+  document.querySelectorAll('.gpill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  const key = pill.dataset.group;
+  const d = gd[key];
+  if(d) {
+    document.getElementById('groupSummary').textContent = pill.textContent + ' · ' + d.users.toLocaleString() + ' users · Avg Portfolio ' + d.portfolio;
+    updateAnalytics(key);
+  }
+});
+</script>
+</body>
+</html>

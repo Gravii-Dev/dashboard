@@ -1,0 +1,73 @@
+.riskGridTop { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.riskLeft { display: flex; flex-direction: column; gap: 16px; }
+.riskMiniKpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.miniKpi { padding: 14px; }
+.miniKpi :global(.card-title) { margin-bottom: 8px; }
+
+.flaggedChain { margin-bottom: 12px; }
+.flaggedChain:last-child { margin-bottom: 0; }
+.flaggedChainHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+
+.riskRight { display: flex; flex-direction: column; }
+.clusterStack { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.clusterCard {
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border-card); border-radius: var(--radius-md);
+  padding: 16px; border-top: 3px solid transparent; transition: border-color 0.2s;
+}
+.clusterCard:hover { border-color: var(--border-hover); }
+.criticalAccent { border-top-color: var(--accent-red); }
+.highAccent { border-top-color: var(--accent-orange); }
+.mediumAccent { border-top-color: var(--accent-amber); }
+.clusterCardHeader { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.clusterCardBody { display: flex; flex-direction: column; gap: 6px; }
+.clusterName { font-weight: 600; font-size: 15px; margin-right: 10px; }
+.clusterWallets { text-align: right; }
+.clusterWallets :global(.bar-meta) { display: block; }
+.clusterDetail { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+
+.riskBadge { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 12px; }
+.critical { background: rgba(248,81,73,0.15); color: var(--accent-red); }
+.high { background: rgba(240,136,62,0.15); color: var(--accent-orange); }
+.medium { background: rgba(227,179,65,0.15); color: var(--accent-amber); }
+.low { background: rgba(86,212,192,0.15); color: var(--accent-teal); }
+
+.entropyBar { display: inline-block; width: 60px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; vertical-align: middle; margin-left: 6px; }
+.entropyFill { display: block; height: 100%; background: var(--accent-orange); border-radius: 3px; }
+
+.tableHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.tableFilters { display: flex; gap: 8px; }
+.tableFilter {
+  background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-secondary);
+  padding: 6px 12px; border-radius: 6px; font-family: 'Outfit', sans-serif; font-size: 12px; cursor: pointer;
+}
+.flaggedTable { width: 100%; border-collapse: collapse; }
+.flaggedTable th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); }
+.flaggedTable td { padding: 10px 12px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); }
+.mono { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-primary); }
+.btnBlock { background: var(--accent-red); color: white; border: none; padding: 5px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: opacity 0.2s; }
+.btnBlock:hover { opacity: 0.8; }
+
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+}
+.dialog {
+  background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: var(--radius-lg);
+  padding: 28px; max-width: 420px; width: 90%;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+.dialogTitle { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+.dialogMessage { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+.dialogMessage strong { color: var(--text-primary); font-family: 'Space Mono', monospace; font-size: 12px; }
+.dialogActions { display: flex; gap: 10px; justify-content: flex-end; }
+.dialogCancel {
+  padding: 8px 20px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card);
+  color: var(--text-secondary); border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-family: inherit;
+}
+.dialogCancel:hover { border-color: var(--border-hover); }
+.dialogConfirm {
+  padding: 8px 20px; background: var(--accent-red); border: none; color: white;
+  border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.dialogConfirm:hover { opacity: 0.85; }
+.dialogConfirm:disabled { opacity: 0.5; cursor: not-allowed; }

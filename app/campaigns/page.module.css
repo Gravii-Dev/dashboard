@@ -1,0 +1,63 @@
+.campListHeader { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.campListTitle { font-size:16px; font-weight:700; color:var(--text-secondary); }
+.campFilters { display:flex; gap:6px; }
+.campCards { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:24px; }
+
+.campCard { background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--radius-md); padding:16px; transition:border-color 0.2s; }
+.campCard:hover { border-color:var(--border-hover); }
+.campCardTop { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.campPartner { font-size:11px; color:var(--text-muted); margin-bottom:2px; }
+.campName { font-size:15px; font-weight:700; color:var(--text-primary); }
+.campBadges { display:flex; gap:6px; align-items:center; }
+.campTypeBadge { font-size:11px; padding:3px 10px; border-radius:12px; background:rgba(88,166,255,0.1); color:var(--accent-blue); }
+.campStatusBadge { font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600; }
+.live { background:rgba(63,187,123,0.15); color:var(--accent-teal); }
+.draft { background:rgba(255,255,255,0.06); color:var(--text-muted); }
+.ended { background:rgba(248,81,73,0.12); color:var(--accent-red); }
+.campCardMeta { display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); }
+
+.campFormWrapper { background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:24px; }
+.campStep { margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border-subtle); }
+.campStep:last-of-type { border-bottom:none; margin-bottom:16px; }
+.campStepHeader { font-size:15px; font-weight:700; color:var(--text-secondary); margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+.stepNum { width:26px; height:26px; border-radius:50%; background:rgba(88,166,255,0.12); color:var(--accent-blue); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+.campFormGrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.campField { display:flex; flex-direction:column; gap:4px; }
+.campLabel { font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; }
+.campInput, .campSelect, .campTextarea {
+  background:rgba(255,255,255,0.03); border:1px solid var(--border-card); border-radius:var(--radius-sm);
+  padding:10px 12px; color:var(--text-primary); font-size:13px; font-family:'Outfit',sans-serif; transition:border-color 0.2s;
+}
+.campInput:focus, .campSelect:focus, .campTextarea:focus { border-color:var(--accent-blue); outline:none; }
+.campSelect { cursor:pointer; }
+.campSelect option { background:var(--bg-primary); color:var(--text-primary); }
+.campTextarea { min-height:80px; resize:vertical; }
+.campPills { flex-wrap:wrap; }
+.campOrNote { font-size:11px; color:var(--text-muted); margin-bottom:12px; font-style:italic; }
+.csegPanel { display:none; }
+.csegPanelActive { display:block; }
+.campReach { font-family:'Space Mono',monospace; font-size:20px; font-weight:700; color:var(--accent-teal); padding:8px 0; }
+.campElig { display:flex; flex-direction:column; gap:4px; }
+.campEligBox { background:rgba(168,120,255,0.06); border:1px solid rgba(168,120,255,0.15); border-radius:var(--radius-sm); padding:10px 14px; font-size:13px; color:var(--text-secondary); margin-top:6px; }
+
+.campToggleRow { display:flex; align-items:center; justify-content:space-between; }
+.campToggle input { display:none; }
+.toggleLabel { width:44px; height:24px; background:rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; position:relative; display:block; transition:background 0.2s; }
+.toggleInner { width:18px; height:18px; background:var(--text-muted); border-radius:50%; position:absolute; top:3px; left:3px; transition:all 0.2s; }
+.campToggle input:checked + .toggleLabel { background:rgba(63,187,123,0.25); }
+.campToggle input:checked + .toggleLabel .toggleInner { left:23px; background:var(--accent-teal); }
+
+.campSubmit { display:flex; gap:12px; justify-content:flex-end; margin-top:8px; }
+.campBtn { padding:12px 28px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+.campBtnDraft { background:rgba(255,255,255,0.06); color:var(--text-secondary); border:1px solid var(--border-card); }
+.campBtnDraft:hover { border-color:var(--border-hover); }
+.campBtnLaunch { background:var(--accent-red); color:white; }
+.campBtnLaunch:hover { opacity:0.9; }
+
+.sybilPreview { font-size:11px; color:var(--accent-amber); margin-top:6px; }
+
+@keyframes fieldHighlight {
+  0% { border-color: var(--accent-teal); box-shadow: 0 0 12px rgba(86,212,192,0.3); }
+  100% { border-color: var(--border-card); box-shadow: none; }
+}
+.campFieldFilled { animation: fieldHighlight 1.5s ease forwards; }

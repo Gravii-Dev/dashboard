@@ -1,0 +1,37 @@
+.labelGridHeader { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 14px; letter-spacing: 0.3px; }
+.labelGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+
+.labelCard {
+  background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius-md);
+  padding: 16px; cursor: pointer; transition: all 0.2s; position: relative;
+}
+.labelCard:hover { border-color: var(--border-hover); box-shadow: 0 0 12px rgba(88,166,255,0.08); }
+.labelCard.selected { border-color: var(--accent-blue); background: rgba(88,166,255,0.04); }
+
+.labelCheckbox {
+  width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-card);
+  display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent;
+  transition: all 0.2s; flex-shrink: 0; margin-right: 8px;
+}
+.labelCard:hover .labelCheckbox { border-color: var(--text-muted); }
+.selected .labelCheckbox { border-color: var(--accent-blue); background: var(--accent-blue); color: white; }
+
+.labelCardTop { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.labelCardLeft { display: flex; align-items: center; }
+.labelCardName { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+.labelCardCount { font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text-primary); white-space: nowrap; margin-left: 8px; }
+.labelCardPct { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; padding-left: 24px; }
+.labelChainBar { display: flex; height: 4px; border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+.labelThreshold { font-size: 11px; color: var(--accent-blue); margin-top: 6px; }
+
+.summarySection {
+  position: relative; background: rgba(168,120,255,0.07); border: 1px solid rgba(168,120,255,0.2);
+  border-radius: var(--radius-lg); padding: 20px; margin-top: 8px;
+}
+.summaryLabel { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 14px; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+.selectedPills { display: flex; flex-wrap: wrap; gap: 4px; }
+.selectedPill { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(88,166,255,0.12); color: var(--accent-blue); }
+
+.summaryGrid :global(.card) { transition: border-color 0.3s; background: rgba(168,120,255,0.05); border-color: rgba(168,120,255,0.12); }
+.summaryGrid.hasFilter :global(.card) { border-color: rgba(168,120,255,0.3); }
+.summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
