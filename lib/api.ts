@@ -36,7 +36,7 @@ async function buildHeaders(): Promise<HeadersInit> {
   return headers;
 }
 
-function qs(params?: Record<string, unknown>): string {
+function qs(params?: object): string {
   if (!params) return "";
   const entries = Object.entries(params).filter(
     ([, v]) => v !== undefined && v !== null,
@@ -82,7 +82,7 @@ async function request<T>(
 
 async function requestPaginated<T>(
   path: string,
-  params?: Record<string, unknown>,
+  params?: object,
 ): Promise<{ items: T[]; total: number }> {
   if (!API_URL) {
     throw new Error(
@@ -109,13 +109,13 @@ async function requestPaginated<T>(
 }
 
 export const apiClient = {
-  get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
+  get<T>(path: string, params?: object): Promise<T> {
     return request<T>("GET", `${path}${qs(params)}`);
   },
 
   getPaginated<T>(
     path: string,
-    params?: Record<string, unknown>,
+    params?: object,
   ): Promise<{ items: T[]; total: number }> {
     return requestPaginated<T>(path, params);
   },
