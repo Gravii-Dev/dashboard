@@ -1,7 +1,11 @@
-import type { ApiResponse, ApiErrorResponse } from "@/types/api";
+import type {
+  ApiResponse,
+  ApiErrorResponse,
+  PaginatedResponse,
+} from "@/types/api";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "").trim().replace(/\/$/, "");
+const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true" || API_URL.length === 0;
 
 export class ApiError extends Error {
   code: string;
@@ -54,6 +58,12 @@ async function request<T>(
   path: string,
   body?: unknown,
 ): Promise<T> {
+  if (!API_URL) {
+    throw new Error(
+      "NEXT_PUBLIC_API_URL is not configured. Set NEXT_PUBLIC_USE_MOCK=true or provide an API URL.",
+    );
+  }
+
   const headers = await buildHeaders();
   const res = await fetch(`${API_URL}${path}`, {
     method,
@@ -70,9 +80,44 @@ async function request<T>(
   return (json as ApiResponse<T>).data;
 }
 
+async function requestPaginated<T>(
+  path: string,
+  params?: Record<string, unknown>,
+): Promise<{ items: T[]; total: number }> {
+  if (!API_URL) {
+    throw new Error(
+      "NEXT_PUBLIC_API_URL is not configured. Set NEXT_PUBLIC_USE_MOCK=true or provide an API URL.",
+    );
+  }
+
+  const headers = await buildHeaders();
+  const res = await fetch(`${API_URL}${path}${qs(params)}`, {
+    method: "GET",
+    headers,
+  });
+
+  const json = await res.json();
+  if (!res.ok || json.success === false) {
+    throw new ApiError(res.status, json as ApiErrorResponse);
+  }
+
+  const paginated = json as PaginatedResponse<T>;
+  return {
+    items: paginated.data,
+    total: paginated.pagination.total,
+  };
+}
+
 export const apiClient = {
   get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
     return request<T>("GET", `${path}${qs(params)}`);
+  },
+
+  getPaginated<T>(
+    path: string,
+    params?: Record<string, unknown>,
+  ): Promise<{ items: T[]; total: number }> {
+    return requestPaginated<T>(path, params);
   },
 
   post<T>(path: string, body?: unknown): Promise<T> {

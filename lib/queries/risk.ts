@@ -48,12 +48,7 @@ export function useRiskWallets(params?: RiskWalletsParams) {
         const res = await mockGetRiskWallets(params);
         return { items: res.data, total: res.pagination.total };
       }
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/risk/wallets`,
-        { method: "GET" },
-      );
-      const json = await res.json();
-      return { items: json.data, total: json.pagination.total };
+      return apiClient.getPaginated<RiskWallet>("/risk/wallets", params);
     },
   });
 }
